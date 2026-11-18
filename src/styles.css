@@ -188,8 +188,8 @@
 
 @media print {
   @page {
-    size: portrait;
-    margin: 6mm 8mm;
+    size: A4 portrait;
+    margin: 8mm;
   }
   html, body {
     margin: 0 !important;
@@ -207,9 +207,12 @@
     margin: 0 auto !important;
     width: 100% !important;
     max-width: 100% !important;
+    height: 278mm !important;
+    max-height: 278mm !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: avoid !important;
     padding: 0 !important;
+    box-sizing: border-box !important;
   }
 }
