@@ -89,7 +89,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
 
             {/* Address */}
             <p className="mt-0.5 text-[11px] sm:text-xs font-bold tracking-wider text-slate-700 uppercase">
-              SILCHAR ROAD (NEAR BHAIRABBARI) SRIBHUMI, ASSAM
+              Silchar Road, Opposite of Senco petrol pump, Sribhumi , Assam - 788713
             </p>
 
             {/* Government Licence Badge */}
