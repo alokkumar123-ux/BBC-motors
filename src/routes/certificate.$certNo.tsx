@@ -65,7 +65,7 @@ function CertificatePage() {
           </button>
         </div>
       </div>
-      <div className="px-4 pb-12">
+      <div className="px-4 pb-12 print:p-0 print:pb-0">
         <CertificateDocument certificate={certificate} />
       </div>
     </div>

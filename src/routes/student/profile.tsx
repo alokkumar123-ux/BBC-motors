@@ -17,7 +17,14 @@ function StudentProfilePage() {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <PageHeading title="Trainee Profile" subtitle={`Student ID: ${student.id} · Form 14 Record`} />
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <PageHeading title="Trainee Profile" subtitle={`Student ID: ${student.id} · Form 14 Record`} />
+        {student.photo && (
+          <div className="h-24 w-20 border-2 border-[#164535] p-0.5 bg-white shadow-sm shrink-0">
+            <img src={student.photo} alt={student.name} className="h-full w-full object-cover" />
+          </div>
+        )}
+      </div>
       <Panel title="Personal & Enrolment Details">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="border border-border/80 p-3 bg-muted/10">

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { UserPlus } from "lucide-react";
+import { Camera, Image as ImageIcon, Trash2, Upload, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { DataTable, PageHeading, Panel, StatusPill } from "@/components/portal/PortalShell";
@@ -50,6 +50,44 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () => void }) {
   const [sameAddress, setSameAddress] = useState(false);
+  const [photo, setPhoto] = useState<string>("");
+
+  function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Read and compress image to reasonable dimensions for Firestore document storage
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 360;
+
+        if (width > height && width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressed = canvas.toDataURL("image/jpeg", 0.85);
+          setPhoto(compressed);
+          toast.success("Passport photo uploaded successfully");
+        }
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -59,6 +97,7 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
     const next: Student = {
       id: nextStudentId(students),
       name: get("name"),
+      photo: photo || undefined,
       fatherOrHusbandName: get("fatherOrHusbandName"),
       gender: get("gender") as Student["gender"],
       dob: get("dob"),
@@ -93,15 +132,63 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto max-h-[75vh] pr-1">
 
+      {/* ── Photo Upload Section (Top of Form 14) ── */}
+      <div className="border border-border/80 bg-muted/20 p-4">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          {/* Photo Preview Box (Passport Size 3:4) */}
+          <div className="relative h-28 w-24 shrink-0 border-2 border-dashed border-[#164535]/40 bg-white grid place-items-center overflow-hidden">
+            {photo ? (
+              <img src={photo} alt="Trainee preview" className="h-full w-full object-cover" />
+            ) : (
+              <div className="text-center p-2">
+                <Camera className="mx-auto h-6 w-6 text-slate-400" />
+                <span className="text-[10px] text-muted-foreground block mt-1">Photo</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex-1 space-y-1.5 text-center sm:text-left">
+            <Label className="text-xs font-bold uppercase tracking-wider text-[#164535]">
+              Trainee Passport Photograph
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              Upload passport-sized photo for Admission Form &amp; Driving Certificate (JPG, PNG).
+            </p>
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <label className="cursor-pointer inline-flex items-center gap-1.5 border border-[#164535] bg-[#164535] hover:bg-[#0e2c22] px-3 py-1.5 text-xs font-semibold text-white transition-colors">
+                <Upload className="h-3.5 w-3.5" />
+                <span>{photo ? "Change Photo" : "Upload Photo"}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+              </label>
+
+              {photo && (
+                <button
+                  type="button"
+                  onClick={() => setPhoto("")}
+                  className="inline-flex items-center gap-1 border border-destructive/40 text-destructive hover:bg-destructive/10 px-2.5 py-1.5 text-xs font-semibold"
+                >
+                  <Trash2 className="h-3 w-3" /> Remove
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ── Personal Information ── */}
       <SectionTitle>Personal Information</SectionTitle>
 
       <Field id="name" label="Full Name of Trainee *">
-        <input id="name" name="name" required placeholder="e.g. Karan Bose" className={inputCls} />
+        <input id="name" name="name" required placeholder="e.g. Alok Kumar Dey" className={inputCls} />
       </Field>
 
       <Field id="fatherOrHusbandName" label="Father's / Husband's Name *">
-        <input id="fatherOrHusbandName" name="fatherOrHusbandName" required placeholder="e.g. Ratan Bose" className={inputCls} />
+        <input id="fatherOrHusbandName" name="fatherOrHusbandName" required placeholder="e.g. Ratan Dey" className={inputCls} />
       </Field>
 
       <FieldRow>
@@ -266,12 +353,21 @@ function StudentsPage() {
           className="mb-4 max-w-sm rounded-none"
         />
         <DataTable
-          head={["ID", "Name", "Guardian", "DOB", "Course", "Phone", "Enrolled", "Status"]}
+          head={["ID", "Trainee", "Guardian", "DOB", "Course", "Phone", "Enrolled", "Status"]}
           rows={filtered.map((s) => [
             <span className="font-mono text-xs">{s.id}</span>,
-            <div>
-              <p className="font-semibold text-sm">{s.name}</p>
-              {s.gender && <p className="text-xs text-muted-foreground">{s.gender}{s.bloodGroup ? ` · ${s.bloodGroup}` : ""}</p>}
+            <div className="flex items-center gap-2.5">
+              {s.photo ? (
+                <img src={s.photo} alt={s.name} className="h-8 w-7 object-cover border border-slate-300 shrink-0" />
+              ) : (
+                <div className="grid h-8 w-7 place-items-center bg-slate-100 border border-slate-200 text-slate-400 shrink-0">
+                  <ImageIcon className="h-3.5 w-3.5" />
+                </div>
+              )}
+              <div>
+                <p className="font-semibold text-sm">{s.name}</p>
+                {s.gender && <p className="text-xs text-muted-foreground">{s.gender}{s.bloodGroup ? ` · ${s.bloodGroup}` : ""}</p>}
+              </div>
             </div>,
             <span className="text-xs text-muted-foreground">{s.fatherOrHusbandName ?? "—"}</span>,
             <span className="text-xs">{s.dob ? formatDateLong(s.dob) : "—"}</span>,

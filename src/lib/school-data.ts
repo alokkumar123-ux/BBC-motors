@@ -27,6 +27,7 @@ export interface Course {
 export interface Student {
   id: string;
   name: string;
+  photo?: string | undefined;           // Base64 or image URL
   fatherOrHusbandName: string;
   gender: "Male" | "Female" | "Other";
   dob: string;              // ISO date YYYY-MM-DD
@@ -54,6 +55,7 @@ export interface Certificate {
   number: string;
   studentId: string;
   studentName: string;
+  photo?: string | undefined;           // Trainee passport photo
   course: CourseCode;
   issuedOn: string; // ISO date
   status: "Valid" | "Revoked";

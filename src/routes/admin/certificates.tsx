@@ -72,6 +72,7 @@ function AdminCertificatesPage() {
       number: newCertNo,
       studentId: student.id,
       studentName: student.name,
+      photo: student.photo,
       course: certCourse,
       issuedOn: new Date().toISOString().slice(0, 10),
       status: "Valid",
