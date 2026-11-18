@@ -1,6 +1,7 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { CheckCircle, ShieldCheck, User } from "lucide-react";
+import managerSignature from "@/assets/manager-signature.png";
 import { Emblem } from "@/components/site/Emblem";
 import {
   type Certificate,
@@ -285,17 +286,13 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
 
             {/* Right: Authorised Signature & Rubber Stamp */}
             <div className="text-right space-y-1">
-              {/* Signature Graphic Area */}
-              <div className="h-7 flex justify-end items-end pr-1">
-                <svg
-                  viewBox="0 0 140 40"
-                  className="h-7 w-24 text-blue-900 stroke-current"
-                  fill="none"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                >
-                  <path d="M 8 28 C 20 8, 30 10, 36 24 C 42 34, 52 16, 62 18 C 72 20, 68 32, 80 26 C 92 20, 100 28, 114 20 C 122 16, 130 18, 136 14" />
-                </svg>
+              {/* Official Manager Signature */}
+              <div className="flex justify-end items-end pr-1">
+                <img
+                  src={managerSignature}
+                  alt="Authorised Signature"
+                  className="h-10 sm:h-12 w-auto object-contain -mb-1.5"
+                />
               </div>
 
               <div className="border-t border-[#164535]/50 pt-0.5 font-serif text-[#164535] font-bold text-[11px]">
