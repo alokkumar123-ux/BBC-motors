@@ -187,7 +187,22 @@
 }
 
 @media print {
-  .no-print { display: none !important; }
-  body { background: white; }
-  .print-area { box-shadow: none !important; margin: 0 !important; }
+  @page {
+    size: A4 portrait;
+    margin: 6mm;
+  }
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .print-area {
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }

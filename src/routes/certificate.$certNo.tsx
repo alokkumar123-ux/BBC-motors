@@ -42,30 +42,30 @@ function CertificatePage() {
   const { certificate } = Route.useLoaderData();
   const router = useRouter();
   return (
-    <div className="min-h-screen bg-muted py-6">
-      <div className="no-print mx-auto mb-4 flex max-w-[860px] items-center gap-2 px-4">
+    <div className="min-h-screen bg-muted/60 py-6">
+      <div className="no-print mx-auto mb-4 flex max-w-[800px] items-center gap-2 px-4">
         <button
           onClick={() => router.history.back()}
-          className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-[#164535] hover:underline"
         >
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
         <div className="ml-auto flex gap-2">
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-md border bg-card px-3 py-1.5 text-sm font-semibold hover:bg-accent"
+            className="inline-flex items-center gap-2 rounded-none border border-[#164535] bg-[#164535] px-4 py-2 text-xs font-bold text-white hover:bg-[#0e2c22] shadow-xs"
           >
-            <Download className="h-4 w-4" /> Download PDF
+            <Download className="h-4 w-4 text-[#E5C179]" /> Download PDF
           </button>
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-md border bg-card px-3 py-1.5 text-sm font-semibold hover:bg-accent"
+            className="inline-flex items-center gap-2 rounded-none border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-800 hover:bg-slate-100 shadow-xs"
           >
-            <Printer className="h-4 w-4" /> Print
+            <Printer className="h-4 w-4 text-slate-600" /> Print
           </button>
         </div>
       </div>
-      <div className="px-4">
+      <div className="px-4 pb-12">
         <CertificateDocument certificate={certificate} />
       </div>
     </div>
