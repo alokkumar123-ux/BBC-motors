@@ -41,7 +41,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
     student?.id?.replace("STU-", "") ||
     certificate.number.replace(/\D/g, "").slice(-4) ||
     "157";
-  const vehicleClass = course.name; // Avoids duplicate "(LMV) (LMV)"
+  const vehicleClass = `${course.name} (${course.code})`;
   const periodFrom = student?.enrolledOn
     ? formatDateDMY(student.enrolledOn)
     : formatDateDMY(certificate.issuedOn);
@@ -52,10 +52,10 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
   const photoUrl = student?.photo || certificate.photo;
 
   return (
-    <div className="print-area relative mx-auto w-full max-w-[760px] bg-[#FAF9F5] text-slate-800 shadow-2xl p-4 sm:p-6 print:p-2 border border-[#E2DFD5] print:border-none">
+    <div className="print-area relative mx-auto w-full max-w-[760px] bg-[#FAF9F5] text-slate-800 shadow-2xl p-4 sm:p-6 print:p-0 border border-[#E2DFD5] print:border-none">
       {/* Outer Executive Double Border with Gold and Forest Green Accents */}
-      <div className="relative border-[3px] border-[#164535] p-2 bg-[#FAF9F5]">
-        <div className="relative border-2 border-[#C59E53] p-5 sm:p-6 print:p-4 bg-[#FAF9F5]">
+      <div className="relative border-[3px] border-[#164535] p-1.5 print:p-1 bg-[#FAF9F5]">
+        <div className="relative border-2 border-[#C59E53] p-4 sm:p-5 print:p-3.5 bg-[#FAF9F5]">
 
           {/* Geometric Corner Accents */}
           <div className="absolute -top-1 -left-1 w-3.5 h-3.5 bg-[#164535] border border-[#C59E53]" />
@@ -64,9 +64,9 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
           <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-[#164535] border border-[#C59E53]" />
 
           {/* ══════════════════════════════════════════════════════════
-              1. GRAND CENTERED HEADER (Symmetrical & Prestigious)
+              1. GRAND CENTERED HEADER (Single page calibrated)
              ══════════════════════════════════════════════════════════ */}
-          <div className="text-center pb-3 border-b-2 border-[#C59E53]/60">
+          <div className="text-center pb-2.5 print:pb-2 border-b-2 border-[#C59E53]/60">
             {/* Top Govt Emblem & Eyebrow */}
             <div className="flex items-center justify-center gap-2 mb-1">
               <div className="grid h-8 w-8 place-items-center bg-[#164535] p-1 text-white border border-[#C59E53]">
@@ -93,7 +93,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
             </p>
 
             {/* Government Licence Badge */}
-            <div className="mt-1 inline-flex items-center gap-1.5 bg-[#EAF1ED] border border-[#164535]/30 px-2.5 py-0.5 text-[10px] sm:text-[11px] font-bold text-[#164535]">
+            <div className="mt-1 inline-flex items-center gap-1.5 bg-[#EAF1ED] border border-[#164535]/30 px-2.5 py-0.5 text-[10px] font-bold text-[#164535]">
               <ShieldCheck className="h-3 w-3 text-[#164535]" />
               <span>LICENCE NO. DTK / MDSL / 02 / 2004</span>
             </div>
@@ -102,7 +102,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
           {/* ══════════════════════════════════════════════════════════
               2. SUB-HEADER: TITLE, NUMBERS & PASSPORT PHOTO
              ══════════════════════════════════════════════════════════ */}
-          <div className="mt-3 grid grid-cols-[1fr_auto] items-center gap-3 bg-[#F2F0E6] p-3 border border-[#E2DFD5]">
+          <div className="mt-2.5 print:mt-2 grid grid-cols-[1fr_auto] items-center gap-3 bg-[#F2F0E6] p-2.5 sm:p-3 print:p-2 border border-[#E2DFD5]">
             {/* Left: Certificate Details & QR */}
             <div className="flex items-center gap-3 sm:gap-4">
               {/* QR Code */}
@@ -158,57 +158,106 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
           </div>
 
           {/* ══════════════════════════════════════════════════════════
-              3. CERTIFICATE BODY TEXT (Flowing, High Prestige Typography)
+              3. CERTIFICATE BODY TEXT (Compact & Fits on 1 Page)
              ══════════════════════════════════════════════════════════ */}
-          <div className="mt-4 space-y-3 text-xs sm:text-[13px] print:text-xs text-slate-800 leading-relaxed font-serif text-justify">
-            {/* Paragraph 1: Trainee Identity & Admission */}
-            <p>
-              This is to Certify that Sri / Smti. / Kumari{" "}
-              <strong className="font-sans font-extrabold text-[#164535] underline decoration-[#C59E53] decoration-2 underline-offset-4 tracking-wide">
+          <div className="mt-3.5 print:mt-2.5 space-y-2 sm:space-y-2.5 print:space-y-1.5 text-xs sm:text-[13px] print:text-xs text-slate-800 leading-normal sm:leading-relaxed print:leading-normal font-serif">
+            {/* Line 1 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="font-bold text-[#164535]">
+                This is to Certify that Sri / Smti. / Kumari
+              </span>
+              <span className="flex-1 min-w-[200px] border-b-2 border-[#C59E53] pb-0.5 font-sans font-extrabold text-[#164535] text-sm tracking-wide">
                 {studentName}
-              </strong>
-              , Son / Daughter / Wife of{" "}
-              <strong className="font-sans font-bold text-slate-900 underline decoration-slate-400 underline-offset-4">
+              </span>
+            </div>
+
+            {/* Line 2 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="font-bold text-[#164535]">
+                Son / Daughter / Wife of
+              </span>
+              <span className="flex-1 min-w-[200px] border-b border-slate-400 pb-0.5 font-sans font-bold text-slate-900">
                 {fatherOrHusbandName}
-              </strong>
-              , residing at{" "}
-              <strong className="font-sans font-medium text-slate-800 underline decoration-slate-400 underline-offset-4">
+              </span>
+            </div>
+
+            {/* Line 3 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="font-bold text-[#164535]">
+                residing at
+              </span>
+              <span className="flex-1 min-w-[220px] border-b border-slate-400 pb-0.5 font-sans font-medium text-slate-800">
                 {residingAddress}
-              </strong>
-              , Date of Birth{" "}
-              <strong className="font-sans font-semibold text-slate-900 underline decoration-slate-400 underline-offset-4">
+              </span>
+            </div>
+
+            {/* Line 4 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="font-bold text-[#164535]">
+                Date of Birth
+              </span>
+              <span className="w-32 sm:w-40 border-b border-slate-400 pb-0.5 font-sans font-semibold text-slate-900">
                 {dobText}
-              </strong>
-              , was enrolled in this School on{" "}
-              <strong className="font-sans font-semibold text-slate-900 underline decoration-slate-400 underline-offset-4">
+              </span>
+            </div>
+
+            {/* Line 5 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="font-bold text-[#164535]">
+                was enrolled in this School on
+              </span>
+              <span className="w-32 sm:w-36 border-b border-slate-400 pb-0.5 font-sans font-semibold text-slate-900 text-center">
                 {enrolledOnText}
-              </strong>{" "}
-              and his / her name is registered at serial number{" "}
-              <strong className="font-mono font-bold text-[#164535] underline decoration-[#C59E53] decoration-2 underline-offset-4">
+              </span>
+              <span className="font-bold text-[#164535]">
+                and
+              </span>
+            </div>
+
+            {/* Line 6 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="font-bold text-[#164535]">
+                his / her name is registered at serial number
+              </span>
+              <span className="w-20 sm:w-28 border-b-2 border-[#C59E53] pb-0.5 font-mono font-bold text-[#164535] text-center">
                 {serialNo}
-              </strong>{" "}
-              in our Register in Form 14.
-            </p>
+              </span>
+              <span className="font-bold text-[#164535]">
+                in our Register in Form 14
+              </span>
+            </div>
 
-            {/* Paragraph 2: Course & Training Completion */}
-            <p>
-              And that he / she has undergone the course of training in driving of{" "}
-              <strong className="font-sans font-black text-[#164535] underline decoration-[#164535] decoration-2 underline-offset-4">
+            {/* Line 7 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="font-bold text-[#164535]">
+                and that he / she has undergone the course of training in driving of
+              </span>
+              <span className="flex-1 min-w-[180px] border-b-2 border-[#164535] pb-0.5 font-sans font-black text-[#164535] text-sm">
                 {vehicleClass}
-              </strong>{" "}
-              (mention class of vehicle) according to the syllabus prescribed for a period from{" "}
-              <strong className="font-sans font-semibold text-slate-900 underline decoration-slate-400 underline-offset-4">
-                {periodFrom}
-              </strong>{" "}
-              to{" "}
-              <strong className="font-sans font-semibold text-slate-900 underline decoration-slate-400 underline-offset-4">
-                {periodTo}
-              </strong>{" "}
-              satisfactorily.
-            </p>
+              </span>
+            </div>
 
-            {/* Paragraph 3: Fitness & Responsibility Declaration */}
-            <div className="border-l-4 border-[#C59E53] bg-[#F5F4EF] p-2.5 text-xs sm:text-[12.5px] print:text-[11.5px] font-sans italic text-slate-700 not-italic-quotes">
+            {/* Line 8 & 9 */}
+            <div className="flex flex-wrap items-baseline gap-1.5">
+              <span className="text-slate-600">
+                (mention class of vehicle) according to the syllabus prescribed for a period from
+              </span>
+              <span className="w-28 sm:w-32 border-b border-slate-400 pb-0.5 font-sans font-semibold text-slate-900 text-center">
+                {periodFrom}
+              </span>
+              <span className="font-bold text-[#164535]">
+                to
+              </span>
+              <span className="w-28 sm:w-32 border-b border-slate-400 pb-0.5 font-sans font-semibold text-slate-900 text-center">
+                {periodTo}
+              </span>
+              <span className="font-bold text-[#164535]">
+                satisfactorily.
+              </span>
+            </div>
+
+            {/* Line 10: Fitness and responsibility guarantee */}
+            <div className="mt-2.5 print:mt-1.5 border-l-4 border-[#C59E53] bg-[#F5F4EF] p-2 text-xs print:text-[11px] font-sans italic text-slate-700">
               <p>
                 “I am satisfied with his / her physical fitness and sense of responsibility.”
               </p>
@@ -216,9 +265,9 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
           </div>
 
           {/* ══════════════════════════════════════════════════════════
-              4. BOTTOM AUTHENTICATION & SIGNATURES (Anchored & Clean)
+              4. BOTTOM AUTHENTICATION & SIGNATURES (Single page height)
              ══════════════════════════════════════════════════════════ */}
-          <div className="mt-5 pt-3 border-t-2 border-[#C59E53]/60 flex flex-wrap items-end justify-between gap-4 text-xs">
+          <div className="mt-4 sm:mt-5 print:mt-3 pt-3 border-t-2 border-[#C59E53]/40 flex flex-wrap items-end justify-between gap-4 text-xs">
             {/* Left: Issue Details */}
             <div className="space-y-1">
               <div>

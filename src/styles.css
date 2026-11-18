@@ -135,15 +135,18 @@
 }
 
 @layer base {
+
   *,
   *::before,
   *::after {
     border-color: var(--color-border);
     border-radius: 0px !important;
   }
+
   html {
     font-family: var(--font-sans);
   }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -154,34 +157,56 @@
 @utility bg-hero {
   background-image: var(--gradient-hero);
 }
+
 @utility bg-panel {
   background-image: var(--gradient-panel);
 }
+
 @utility shadow-card {
   box-shadow: var(--shadow-card);
 }
+
 @utility shadow-float {
   box-shadow: var(--shadow-float);
 }
+
 @utility road-lines {
   background-image: repeating-linear-gradient(90deg, oklch(1 0 0 / 0.55) 0 48px, transparent 48px 96px);
 }
+
 @utility cert-border {
   border: 10px solid transparent;
   border-image: repeating-linear-gradient(45deg, var(--cert-gold) 0 6px, var(--cert-red) 6px 9px, var(--cert-gold) 9px 15px) 10;
 }
 
 @keyframes drive-in {
-  from { transform: translateX(40px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
+
 @keyframes rise {
-  from { transform: translateY(14px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
 @utility animate-drive-in {
   animation: drive-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
+
 @utility animate-rise {
   animation: rise 0.6s ease-out both;
 }
@@ -189,30 +214,33 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 5mm;
+    margin: 8mm;
   }
-  html, body {
+
+  html,
+  body {
     margin: 0 !important;
     padding: 0 !important;
     background: white !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
   .no-print {
     display: none !important;
   }
+
   .print-area {
     box-shadow: none !important;
     border: none !important;
     margin: 0 auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    height: auto !important;
-    max-height: 100% !important;
+    height: 278mm !important;
+    max-height: 278mm !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: avoid !important;
-    break-after: avoid !important;
     padding: 0 !important;
     box-sizing: border-box !important;
   }
