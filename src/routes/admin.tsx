@@ -1,6 +1,7 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { BookOpen, FileBadge, FileSearch, House, Megaphone, Settings, Users, Wallet } from "lucide-react";
 import { PortalShell, type PortalNavItem } from "@/components/portal/PortalShell";
+import { getAdminSession, clearAdminSession } from "@/lib/admin-auth";
 
 const NAV: PortalNavItem[] = [
   { to: "/admin", label: "Dashboard", icon: House, exact: true },
@@ -14,6 +15,13 @@ const NAV: PortalNavItem[] = [
 ];
 
 export const Route = createFileRoute("/admin")({
+  beforeLoad: ({ location }) => {
+    // Allow the login page itself to pass through without an auth check
+    if (location.pathname === "/admin/login") return;
+    if (!getAdminSession()) {
+      throw redirect({ to: "/admin/login" });
+    }
+  },
   head: () => ({
     meta: [
       { title: "Admin Panel — BBC Motors Driving School" },
@@ -25,9 +33,23 @@ export const Route = createFileRoute("/admin")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => (
-    <PortalShell title="BBC Motors" subtitle="Admin Panel" nav={NAV} user={{ name: "Admin", initial: "A" }}>
+  component: AdminLayout,
+});
+
+function AdminLayout() {
+  const navigate = useNavigate();
+  return (
+    <PortalShell
+      title="BBC Motors"
+      subtitle="Admin Panel"
+      nav={NAV}
+      user={{ name: "Admin", initial: "A" }}
+      onLogout={() => {
+        clearAdminSession();
+        navigate({ to: "/admin/login" });
+      }}
+    >
       <Outlet />
     </PortalShell>
-  ),
-});
+  );
+}

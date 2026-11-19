@@ -23,6 +23,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAnnouncementsRouteImport } from './routes/admin/announcements'
 import { Route as AdminCertificatesRouteImport } from './routes/admin/certificates'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminPaymentsRouteImport } from './routes/admin/payments'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AdminStudentsRouteImport } from './routes/admin/students'
@@ -103,6 +104,11 @@ const AdminCoursesRoute = AdminCoursesRouteImport.update({
   path: '/courses',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
   id: '/payments',
   path: '/payments',
@@ -163,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/login': typeof AdminLoginRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/login': typeof AdminLoginRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/admin/announcements': typeof AdminAnnouncementsRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/login': typeof AdminLoginRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/certificates'
     | '/admin/courses'
+    | '/admin/login'
     | '/admin/payments'
     | '/admin/settings'
     | '/admin/students'
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/certificates'
     | '/admin/courses'
+    | '/admin/login'
     | '/admin/payments'
     | '/admin/settings'
     | '/admin/students'
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
     | '/admin/announcements'
     | '/admin/certificates'
     | '/admin/courses'
+    | '/admin/login'
     | '/admin/payments'
     | '/admin/settings'
     | '/admin/students'
@@ -413,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCoursesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/payments': {
       id: '/admin/payments'
       path: '/payments'
@@ -483,6 +502,7 @@ interface AdminRouteChildren {
   AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
   AdminCertificatesRoute: typeof AdminCertificatesRoute
   AdminCoursesRoute: typeof AdminCoursesRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
@@ -494,6 +514,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAnnouncementsRoute: AdminAnnouncementsRoute,
   AdminCertificatesRoute: AdminCertificatesRoute,
   AdminCoursesRoute: AdminCoursesRoute,
+  AdminLoginRoute: AdminLoginRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminStudentsRoute: AdminStudentsRoute,

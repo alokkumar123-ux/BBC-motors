@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, CalendarDays, Car, CheckCircle2, Clock, FilePlus2, FileText, Megaphone, ShieldCheck, UserCheck, UserPlus, Users } from "lucide-react";
+import { ArrowRight, CalendarDays, Car, FilePlus2, IndianRupee, Megaphone, ShieldCheck, TrendingUp, UserCheck, UserPlus, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Panel } from "@/components/portal/PortalShell";
 import { COURSES, initials, useStudents, useCertificates } from "@/lib/school-data";
@@ -42,6 +42,47 @@ function AdminDashboard() {
   const inTrainingCount = students.filter((s) => s.status === "In Progress").length;
   const newEnrolledCount = students.filter((s) => s.status === "Enrolled").length;
   const completedCount = students.filter((s) => s.status === "Completed").length;
+
+  // Earnings analytics
+  const now = new Date();
+  const thisMonth = now.getMonth();
+  const thisYear = now.getFullYear();
+
+  // Count how many students enrolled this month / this year (as a proxy for new fee intake)
+  const enrolledThisMonth = students.filter((s) => {
+    const d = new Date(s.enrolledOn);
+    return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+  });
+  const enrolledThisYear = students.filter((s) => {
+    return new Date(s.enrolledOn).getFullYear() === thisYear;
+  });
+
+  // Per-course fee lookup
+  const FEE_MAP: Record<string, number> = {
+    LMV: 2500, MCWG: 1500, MCWOG: 1200, HMV: 4000, Transport: 5000,
+  };
+  const sumFees = (list: typeof students) =>
+    list.reduce((acc, s) => acc + (FEE_MAP[s.course] ?? 0), 0);
+
+  const earningsThisMonth = sumFees(enrolledThisMonth);
+  const earningsThisYear = sumFees(enrolledThisYear);
+
+  // Monthly breakdown for the past 6 months
+  const monthlyBreakdown = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date(thisYear, thisMonth - (5 - i), 1);
+    const mo = d.getMonth();
+    const yr = d.getFullYear();
+    const count = students.filter((s) => {
+      const sd = new Date(s.enrolledOn);
+      return sd.getMonth() === mo && sd.getFullYear() === yr;
+    });
+    return {
+      label: d.toLocaleDateString("en-IN", { month: "short" }),
+      count: count.length,
+      earnings: sumFees(count),
+    };
+  });
+  const maxEarnings = Math.max(...monthlyBreakdown.map((m) => m.earnings), 1);
 
   const stats = [
     {
@@ -112,6 +153,58 @@ function AdminDashboard() {
           );
         })}
       </div>
+
+      {/* Earnings Analytics */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="col-span-2 border border-border bg-card p-5 shadow-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">This Month Earnings</span>
+            <div className="grid h-9 w-9 place-items-center bg-emerald-50 text-emerald-700">
+              <IndianRupee className="h-5 w-5" strokeWidth={2} />
+            </div>
+          </div>
+          <p className="mt-3 text-3xl font-black text-[#164535]">
+            ₹{earningsThisMonth.toLocaleString("en-IN")}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">{enrolledThisMonth.length} new admissions this month</p>
+        </div>
+        <div className="col-span-2 border border-border bg-card p-5 shadow-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">This Year Earnings</span>
+            <div className="grid h-9 w-9 place-items-center bg-amber-50 text-amber-700">
+              <TrendingUp className="h-5 w-5" strokeWidth={2} />
+            </div>
+          </div>
+          <p className="mt-3 text-3xl font-black text-[#164535]">
+            ₹{earningsThisYear.toLocaleString("en-IN")}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">{enrolledThisYear.length} admissions in {thisYear}</p>
+        </div>
+      </div>
+
+      {/* Monthly Earnings Bar Chart */}
+      <Panel title="Monthly Admissions & Earnings (Last 6 Months)">
+        <div className="flex items-end gap-3" style={{ height: "128px" }}>
+          {monthlyBreakdown.map((m) => {
+            const heightPct = maxEarnings > 0 ? Math.round((m.earnings / maxEarnings) * 100) : 0;
+            return (
+              <div key={m.label} className="flex flex-1 flex-col items-center gap-1">
+                <span className="text-[10px] font-bold text-[#164535]">
+                  {m.earnings > 0 ? `₹${(m.earnings / 1000).toFixed(1)}k` : "—"}
+                </span>
+                <div className="relative w-full bg-slate-100" style={{ height: "72px" }}>
+                  <div
+                    className="absolute bottom-0 w-full bg-[#164535] transition-all"
+                    style={{ height: `${heightPct}%` }}
+                  />
+                </div>
+                <span className="text-[10px] font-semibold text-muted-foreground">{m.label}</span>
+                <span className="text-[9px] text-muted-foreground">{m.count} adm.</span>
+              </div>
+            );
+          })}
+        </div>
+      </Panel>
 
       {/* Middle Section: Recent Registrations & Course Breakdown (No dummy graph) */}
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">

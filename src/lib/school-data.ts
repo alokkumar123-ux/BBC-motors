@@ -45,7 +45,7 @@ export interface Student {
   learnerLicenseExpiry: string; // ISO date or ""
   drivingLicenseNo: string;
   drivingLicenseIssueDate: string; // ISO date or ""
-  advancePayment: string;
+  paymentMethod: "Cash" | "UPI" | "Card" | "Cheque" | "";
   remarks: string;
   status: "In Progress" | "Completed" | "Enrolled";
   progress: number; // 0-100
@@ -110,7 +110,7 @@ export const STUDENTS: Student[] = [
     permanentAddress: "Ward No 5, Karimganj", presentAddress: "Ward No 5, Karimganj",
     phone: "9435012345", email: "alok.dey@example.com", course: "LMV",
     enrolledOn: "2026-11-12", completionDate: "", learnerLicenseNo: "", learnerLicenseExpiry: "",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", advancePayment: "2000", remarks: "",
+    drivingLicenseNo: "", drivingLicenseIssueDate: "", paymentMethod: "Cash", remarks: "",
     status: "In Progress", progress: 60,
   },
   {
@@ -119,7 +119,7 @@ export const STUDENTS: Student[] = [
     permanentAddress: "Nilambazar, Karimganj", presentAddress: "Nilambazar, Karimganj",
     phone: "9864023456", email: "rahim.a@example.com", course: "MCWG",
     enrolledOn: "2026-11-12", completionDate: "", learnerLicenseNo: "", learnerLicenseExpiry: "",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", advancePayment: "1500", remarks: "",
+    drivingLicenseNo: "", drivingLicenseIssueDate: "", paymentMethod: "UPI", remarks: "",
     status: "Enrolled", progress: 10,
   },
   {
@@ -128,7 +128,7 @@ export const STUDENTS: Student[] = [
     permanentAddress: "Station Road, Karimganj", presentAddress: "Station Road, Karimganj",
     phone: "7002034567", email: "priya.b@example.com", course: "HMV",
     enrolledOn: "2026-11-11", completionDate: "", learnerLicenseNo: "AS09-20250011", learnerLicenseExpiry: "2027-05-10",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", advancePayment: "3000", remarks: "",
+    drivingLicenseNo: "", drivingLicenseIssueDate: "", paymentMethod: "Cash", remarks: "",
     status: "In Progress", progress: 35,
   },
   {
@@ -137,7 +137,7 @@ export const STUDENTS: Student[] = [
     permanentAddress: "Ramnagar, Karimganj", presentAddress: "Ramnagar, Karimganj",
     phone: "9101045678", email: "suman.s@example.com", course: "LMV",
     enrolledOn: "2026-11-10", completionDate: "", learnerLicenseNo: "", learnerLicenseExpiry: "",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", advancePayment: "2000", remarks: "",
+    drivingLicenseNo: "", drivingLicenseIssueDate: "", paymentMethod: "Card", remarks: "",
     status: "In Progress", progress: 45,
   },
   {
@@ -146,7 +146,7 @@ export const STUDENTS: Student[] = [
     permanentAddress: "Tarapur, Karimganj", presentAddress: "Tarapur, Karimganj",
     phone: "9954056789", email: "nabanita.d@example.com", course: "LMV",
     enrolledOn: "2026-10-02", completionDate: "2026-11-02", learnerLicenseNo: "AS09-20240789", learnerLicenseExpiry: "2026-12-01",
-    drivingLicenseNo: "AS09 20261039", drivingLicenseIssueDate: "2026-11-05", advancePayment: "2000", remarks: "",
+    drivingLicenseNo: "AS09 20261039", drivingLicenseIssueDate: "2026-11-05", paymentMethod: "Cash", remarks: "",
     status: "Completed", progress: 100,
   },
   {
@@ -155,7 +155,7 @@ export const STUDENTS: Student[] = [
     permanentAddress: "Badarpur, Karimganj", presentAddress: "Badarpur, Karimganj",
     phone: "8011067890", email: "rupam.n@example.com", course: "MCWG",
     enrolledOn: "2026-09-21", completionDate: "2026-10-06", learnerLicenseNo: "AS09-20231122", learnerLicenseExpiry: "2025-11-01",
-    drivingLicenseNo: "AS09 20261038", drivingLicenseIssueDate: "2026-10-10", advancePayment: "1500", remarks: "",
+    drivingLicenseNo: "AS09 20261038", drivingLicenseIssueDate: "2026-10-10", paymentMethod: "Cash", remarks: "",
     status: "Completed", progress: 100,
   },
 ];
@@ -329,6 +329,19 @@ export function useCurrentStudent(): { student: Student; loading: boolean } {
       const s = getLoggedInStudent();
       if (s) {
         setStudent(s);
+        // Refresh from Firestore to fix stale localStorage data
+        if (db) {
+          import("firebase/firestore").then(({ query, collection, where, getDocs }) => {
+            const q = query(collection(db!, "students"), where("phone", "==", s.phone));
+            getDocs(q).then((snap) => {
+              if (!snap.empty) {
+                const fresh = snap.docs[0]!.data() as Student;
+                setStudent(fresh);
+                setLoggedInStudent(fresh);
+              }
+            }).catch(() => {});
+          }).catch(() => {});
+        }
       } else {
         setStudent(CURRENT_STUDENT);
       }

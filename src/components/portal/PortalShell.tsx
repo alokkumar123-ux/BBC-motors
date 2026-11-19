@@ -16,12 +16,14 @@ export function PortalShell({
   subtitle,
   nav,
   user,
+  onLogout,
   children,
 }: {
   title: string;
   subtitle: string;
   nav: PortalNavItem[];
   user: { name: string; initial: string };
+  onLogout?: () => void;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -50,12 +52,14 @@ export function PortalShell({
         ))}
         <button
           onClick={() => {
-            if (typeof window !== "undefined") {
-              try {
-                localStorage.removeItem("bbc_active_student");
-              } catch {}
+            if (onLogout) {
+              onLogout();
+            } else {
+              if (typeof window !== "undefined") {
+                try { localStorage.removeItem("bbc_active_student"); } catch {}
+              }
+              navigate({ to: "/login" });
             }
-            navigate({ to: "/login" });
           }}
           className="mt-2 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-destructive hover:bg-sidebar-accent"
         >

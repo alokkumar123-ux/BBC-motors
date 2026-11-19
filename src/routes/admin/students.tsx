@@ -115,7 +115,7 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
       learnerLicenseExpiry: get("learnerLicenseExpiry"),
       drivingLicenseNo: get("drivingLicenseNo"),
       drivingLicenseIssueDate: get("drivingLicenseIssueDate"),
-      advancePayment: get("advancePayment"),
+      paymentMethod: get("paymentMethod") as Student["paymentMethod"],
       remarks: get("remarks"),
       status: "Enrolled",
       progress: 0,
@@ -271,8 +271,14 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
         <Field id="completionDate" label="Expected Completion Date">
           <input id="completionDate" name="completionDate" type="date" className={inputCls} />
         </Field>
-        <Field id="advancePayment" label="Advance Payment (₹)">
-          <input id="advancePayment" name="advancePayment" type="number" min="0" placeholder="0" className={inputCls} />
+        <Field id="paymentMethod" label="Payment Method *">
+          <select id="paymentMethod" name="paymentMethod" required className={selectCls}>
+            <option value="">— Select —</option>
+            <option value="Cash">Cash</option>
+            <option value="UPI">UPI / Online</option>
+            <option value="Card">Card / Debit</option>
+            <option value="Cheque">Cheque / DD</option>
+          </select>
         </Field>
       </FieldRow>
 
@@ -374,7 +380,18 @@ function StudentsPage() {
             s.course,
             s.phone,
             formatDateLong(s.enrolledOn),
-            <StatusPill status={s.status} />,
+            <select
+              value={s.status}
+              onChange={async (e) => {
+                await saveStudent({ ...s, status: e.target.value as Student["status"] });
+                toast.success("Status updated");
+              }}
+              className="text-xs border border-border px-2 py-1 bg-background focus:outline-none focus:ring-1 focus:ring-[#164535]"
+            >
+              <option value="Enrolled">Enrolled</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>,
           ])}
         />
       </Panel>
