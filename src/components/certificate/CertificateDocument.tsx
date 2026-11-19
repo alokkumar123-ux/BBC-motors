@@ -42,7 +42,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
     student?.id?.replace("STU-", "") ||
     certificate.number.replace(/\D/g, "").slice(-4) ||
     "157";
-  const vehicleClass = `${course.name} (${course.code})`;
+  const vehicleClass = course.name;
   const periodFrom = student?.enrolledOn
     ? formatDateDMY(student.enrolledOn)
     : formatDateDMY(certificate.issuedOn);
