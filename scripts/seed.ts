@@ -68,13 +68,13 @@ const ANNOUNCEMENTS = [
 ];
 
 const SCHOOL = {
-  name: "BBC Motors Driving School",
-  shortName: "BBC Motors",
-  location: "Karimganj, Assam",
+  name: "BBC Motor Driving School",
+  shortName: "BBC Motor",
+  location: "Sribhumi, Assam",
   licenceNo: "DTK/MDLS/02/2004",
-  phones: ["9401773029", "8402026208", "9859137462"],
-  email: "info@bbcmotors.in",
-  address: "Station Road, Karimganj, Assam 788710",
+  phones: ["9401773029", "9859137426", "6901090154"],
+  email: "bbc.drivingschool.sribhumi@gmail.com",
+  address: "Silchar Road, Opposite of Senco petrol pump, Sribhumi , Assam - 788713",
 };
 
 async function seed() {

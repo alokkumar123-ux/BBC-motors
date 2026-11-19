@@ -64,13 +64,13 @@ export interface Certificate {
 }
 
 export const SCHOOL = {
-  name: "BBC Motors Driving School",
-  shortName: "BBC Motors",
-  location: "Karimganj, Assam",
+  name: "BBC Motor Driving School",
+  shortName: "BBC Motor",
+  location: "Sribhumi, Assam",
   licenceNo: "DTK/MDLS/02/2004",
-  phones: ["9401773029", "8402026208", "9859137462"],
-  email: "info@bbcmotors.in",
-  address: "Station Road, Karimganj, Assam 788710",
+  phones: ["9401773029", "6901090154", "9859137426"],
+  email: "bbc.drivingschool.sribhumi@gmail.com",
+  address: "Silchar Road, Opposite of Senco petrol pump, Sribhumi , Assam - 788713",
 };
 
 export const COURSES: Course[] = [
@@ -295,7 +295,7 @@ export function getLoggedInStudent(): Student | null {
   try {
     const raw = localStorage.getItem("bbc_active_student");
     if (raw) return JSON.parse(raw) as Student;
-  } catch {}
+  } catch { }
   return null;
 }
 
@@ -304,7 +304,7 @@ export function setLoggedInStudent(student: Student): void {
   try {
     localStorage.setItem("bbc_active_student", JSON.stringify(student));
     window.dispatchEvent(new Event("student-session-updated"));
-  } catch {}
+  } catch { }
 }
 
 export function logoutStudent(): void {
@@ -312,7 +312,7 @@ export function logoutStudent(): void {
   try {
     localStorage.removeItem("bbc_active_student");
     window.dispatchEvent(new Event("student-session-updated"));
-  } catch {}
+  } catch { }
 }
 
 export function useCurrentStudent(): { student: Student; loading: boolean } {
@@ -340,8 +340,8 @@ export function useCurrentStudent(): { student: Student; loading: boolean } {
                 setStudent(fresh);
                 setLoggedInStudent(fresh);
               }
-            }).catch(() => {});
-          }).catch(() => {});
+            }).catch(() => { });
+          }).catch(() => { });
         }
       } else {
         setStudent(CURRENT_STUDENT);
