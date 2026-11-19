@@ -71,6 +71,14 @@ function StudentProfilePage() {
             </span>
           </div>
 
+          <div className="border border-border/80 p-3 bg-muted/10">
+            <span className="text-muted-foreground block text-[11px]">Course Fee Paid</span>
+            <span className="font-bold text-slate-800">
+              {student.amountPaid ? `₹${Number(student.amountPaid).toLocaleString("en-IN")}` : "—"}
+              {student.paymentMethod ? ` (${student.paymentMethod})` : ""}
+            </span>
+          </div>
+
           <div className="border border-border/80 p-3 bg-muted/10 sm:col-span-2">
             <span className="text-muted-foreground block text-[11px]">Permanent Address</span>
             <span className="font-medium text-slate-800">{student.permanentAddress || "—"}</span>

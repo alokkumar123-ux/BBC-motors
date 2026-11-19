@@ -57,12 +57,15 @@ function AdminDashboard() {
     return new Date(s.enrolledOn).getFullYear() === thisYear;
   });
 
-  // Per-course fee lookup
+  // Per-student fee sum, using the actual amount paid by each student (or course default fallback)
   const FEE_MAP: Record<string, number> = {
     LMV: 2500, MCWG: 1500, MCWOG: 1200, HMV: 4000, Transport: 5000,
   };
   const sumFees = (list: typeof students) =>
-    list.reduce((acc, s) => acc + (FEE_MAP[s.course] ?? 0), 0);
+    list.reduce((acc, s) => {
+      const paid = s.amountPaid ? Number(s.amountPaid) : (FEE_MAP[s.course] ?? 0);
+      return acc + (isNaN(paid) ? 0 : paid);
+    }, 0);
 
   const earningsThisMonth = sumFees(enrolledThisMonth);
   const earningsThisYear = sumFees(enrolledThisYear);

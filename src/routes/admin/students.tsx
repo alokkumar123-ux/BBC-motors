@@ -115,6 +115,7 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
       learnerLicenseExpiry: get("learnerLicenseExpiry"),
       drivingLicenseNo: get("drivingLicenseNo"),
       drivingLicenseIssueDate: get("drivingLicenseIssueDate"),
+      amountPaid: get("amountPaid"),
       paymentMethod: get("paymentMethod") as Student["paymentMethod"],
       remarks: get("remarks"),
       status: "Enrolled",
@@ -253,8 +254,8 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
         </Field>
       </FieldRow>
 
-      {/* ── Course & Enrolment ── */}
-      <SectionTitle>Course & Enrolment</SectionTitle>
+      {/* ── Course & Payment ── */}
+      <SectionTitle>Course & Payment</SectionTitle>
 
       <FieldRow>
         <Field id="course" label="Class of Vehicle *">
@@ -268,8 +269,17 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
       </FieldRow>
 
       <FieldRow>
-        <Field id="completionDate" label="Expected Completion Date">
-          <input id="completionDate" name="completionDate" type="date" className={inputCls} />
+        <Field id="amountPaid" label="Fee / Amount Paid (₹) *">
+          <input
+            id="amountPaid"
+            name="amountPaid"
+            type="number"
+            min="0"
+            step="1"
+            required
+            placeholder="e.g. 3500"
+            className={inputCls}
+          />
         </Field>
         <Field id="paymentMethod" label="Payment Method *">
           <select id="paymentMethod" name="paymentMethod" required className={selectCls}>
@@ -281,6 +291,10 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
           </select>
         </Field>
       </FieldRow>
+
+      <Field id="completionDate" label="Expected Completion Date">
+        <input id="completionDate" name="completionDate" type="date" className={inputCls} />
+      </Field>
 
       {/* ── License Details ── */}
       <SectionTitle>License Details</SectionTitle>
@@ -359,7 +373,7 @@ function StudentsPage() {
           className="mb-4 max-w-sm rounded-none"
         />
         <DataTable
-          head={["ID", "Trainee", "Guardian", "DOB", "Course", "Phone", "Enrolled", "Status"]}
+          head={["ID", "Trainee", "Guardian", "Course", "Fee Paid", "Phone", "Enrolled", "Status"]}
           rows={filtered.map((s) => [
             <span className="font-mono text-xs">{s.id}</span>,
             <div className="flex items-center gap-2.5">
@@ -376,8 +390,15 @@ function StudentsPage() {
               </div>
             </div>,
             <span className="text-xs text-muted-foreground">{s.fatherOrHusbandName ?? "—"}</span>,
-            <span className="text-xs">{s.dob ? formatDateLong(s.dob) : "—"}</span>,
             s.course,
+            <div>
+              <span className="font-bold text-slate-800 text-xs">
+                {s.amountPaid ? `₹${Number(s.amountPaid).toLocaleString("en-IN")}` : "—"}
+              </span>
+              {s.paymentMethod && (
+                <span className="block text-[10px] text-muted-foreground">{s.paymentMethod}</span>
+              )}
+            </div>,
             s.phone,
             formatDateLong(s.enrolledOn),
             <select
