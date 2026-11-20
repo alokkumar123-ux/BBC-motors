@@ -246,7 +246,7 @@ function AdminDashboard() {
                         </span>
                         <div>
                           <p className="font-bold text-slate-800">{r.name}</p>
-                          <p className="text-[11px] text-muted-foreground">ID: {r.id}</p>
+                          <p className="text-[11px] text-muted-foreground">Enrol: {r.id}</p>
                         </div>
                       </div>
                     </td>

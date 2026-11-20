@@ -106,7 +106,7 @@ export const COURSES: Course[] = [
 
 export const STUDENTS: Student[] = [
   {
-    id: "STU-1043", name: "Alok Kumar Dey", fatherOrHusbandName: "Ratan Dey", gender: "Male",
+    id: "65/26", name: "Alok Kumar Dey", fatherOrHusbandName: "Ratan Dey", gender: "Male",
     dob: "1998-05-14", bloodGroup: "B+", qualification: "Graduate", occupation: "Private Job",
     permanentAddress: "Ward No 5, Karimganj", presentAddress: "Ward No 5, Karimganj",
     phone: "9435012345", email: "alok.dey@example.com", course: "LMV",
@@ -115,7 +115,7 @@ export const STUDENTS: Student[] = [
     status: "In Progress", progress: 60,
   },
   {
-    id: "STU-1042", name: "Rahim Ahmed", fatherOrHusbandName: "Karim Ahmed", gender: "Male",
+    id: "66/26", name: "Rahim Ahmed", fatherOrHusbandName: "Karim Ahmed", gender: "Male",
     dob: "2001-03-20", bloodGroup: "O+", qualification: "12th Pass", occupation: "Student",
     permanentAddress: "Nilambazar, Karimganj", presentAddress: "Nilambazar, Karimganj",
     phone: "9864023456", email: "rahim.a@example.com", course: "MCWG",
@@ -124,7 +124,7 @@ export const STUDENTS: Student[] = [
     status: "Enrolled", progress: 10,
   },
   {
-    id: "STU-1041", name: "Priya Baruah", fatherOrHusbandName: "Bikash Baruah", gender: "Female",
+    id: "271/26", name: "Priya Baruah", fatherOrHusbandName: "Bikash Baruah", gender: "Female",
     dob: "1995-08-10", bloodGroup: "A+", qualification: "Graduate", occupation: "Homemaker",
     permanentAddress: "Station Road, Karimganj", presentAddress: "Station Road, Karimganj",
     phone: "7002034567", email: "priya.b@example.com", course: "HMV",
@@ -133,7 +133,7 @@ export const STUDENTS: Student[] = [
     status: "In Progress", progress: 35,
   },
   {
-    id: "STU-1040", name: "Suman Sharma", fatherOrHusbandName: "Dinesh Sharma", gender: "Male",
+    id: "67/26", name: "Suman Sharma", fatherOrHusbandName: "Dinesh Sharma", gender: "Male",
     dob: "1990-12-01", bloodGroup: "AB+", qualification: "10th Pass", occupation: "Business",
     permanentAddress: "Ramnagar, Karimganj", presentAddress: "Ramnagar, Karimganj",
     phone: "9101045678", email: "suman.s@example.com", course: "LMV",
@@ -142,7 +142,7 @@ export const STUDENTS: Student[] = [
     status: "In Progress", progress: 45,
   },
   {
-    id: "STU-1039", name: "Nabanita Das", fatherOrHusbandName: "Narayan Das", gender: "Female",
+    id: "68/26", name: "Nabanita Das", fatherOrHusbandName: "Narayan Das", gender: "Female",
     dob: "1997-07-22", bloodGroup: "B-", qualification: "Graduate", occupation: "Teacher",
     permanentAddress: "Tarapur, Karimganj", presentAddress: "Tarapur, Karimganj",
     phone: "9954056789", email: "nabanita.d@example.com", course: "LMV",
@@ -151,7 +151,7 @@ export const STUDENTS: Student[] = [
     status: "Completed", progress: 100,
   },
   {
-    id: "STU-1038", name: "Rupam Nath", fatherOrHusbandName: "Dilip Nath", gender: "Male",
+    id: "69/26", name: "Rupam Nath", fatherOrHusbandName: "Dilip Nath", gender: "Male",
     dob: "1993-11-15", bloodGroup: "O-", qualification: "12th Pass", occupation: "Driver",
     permanentAddress: "Badarpur, Karimganj", presentAddress: "Badarpur, Karimganj",
     phone: "8011067890", email: "rupam.n@example.com", course: "MCWG",
@@ -162,10 +162,10 @@ export const STUDENTS: Student[] = [
 ];
 
 export const CERTIFICATES: Certificate[] = [
-  { number: "BBC2026/1043", studentId: "STU-1043", studentName: "Alok Kumar Dey", course: "LMV", issuedOn: "2026-11-17", status: "Valid", isReleased: false },
-  { number: "BBC2026/1039", studentId: "STU-1039", studentName: "Nabanita Das", course: "LMV", issuedOn: "2026-11-02", status: "Valid", isReleased: true },
-  { number: "BBC2026/1038", studentId: "STU-1038", studentName: "Rupam Nath", course: "MCWG", issuedOn: "2026-10-06", status: "Valid", isReleased: true },
-  { number: "BBC2025/0877", studentId: "STU-0877", studentName: "Hemanta Saikia", course: "HMV", issuedOn: "2025-06-14", status: "Revoked", isReleased: false },
+  { number: "BBC2026/157", studentId: "65/26", studentName: "Alok Kumar Dey", course: "LMV", issuedOn: "2026-11-17", status: "Valid", isReleased: false },
+  { number: "BBC2026/158", studentId: "68/26", studentName: "Nabanita Das", course: "LMV", issuedOn: "2026-11-02", status: "Valid", isReleased: true },
+  { number: "BBC2026/159", studentId: "69/26", studentName: "Rupam Nath", course: "MCWG", issuedOn: "2026-10-06", status: "Valid", isReleased: true },
+  { number: "BBC2026/271", studentId: "271/26", studentName: "Priya Baruah", course: "HMV", issuedOn: "2026-11-18", status: "Valid", isReleased: false },
 ];
 
 export const DASHBOARD_STATS = [
@@ -221,6 +221,67 @@ export function getCourse(code: CourseCode): Course {
   return COURSES.find((c) => c.code === code) ?? COURSES[0]!;
 }
 
+export function isHeavyVehicleCourse(course: CourseCode): boolean {
+  return course === "HMV" || course === "Transport";
+}
+
+/**
+ * Auto-generates the next enrollment number based on vehicle class:
+ * - LMV, MCWG, MCWOG: Starts from 65/26 and increments (65/26, 66/26, ...)
+ * - HMV, Transport: Starts from 271/26 and increments (271/26, 272/26, ...)
+ */
+export function generateNextEnrollmentNo(students: Student[], course: CourseCode): string {
+  const isHeavy = isHeavyVehicleCourse(course);
+  const currentYearSuffix = String(new Date().getFullYear()).slice(-2); // e.g. "26"
+  const baseStart = isHeavy ? 271 : 65;
+
+  const relevantNums: number[] = [];
+  for (const s of students) {
+    const sHeavy = isHeavyVehicleCourse(s.course);
+    if (sHeavy === isHeavy) {
+      const parts = s.id.split("/");
+      if (parts.length === 2) {
+        const seq = parseInt(parts[0]!, 10);
+        const yr = parts[1]!.trim();
+        if (!isNaN(seq) && (yr === currentYearSuffix || !yr)) {
+          relevantNums.push(seq);
+        }
+      }
+    }
+  }
+
+  const nextSeq = relevantNums.length > 0 ? Math.max(baseStart, Math.max(...relevantNums) + 1) : baseStart;
+  return `${nextSeq}/${currentYearSuffix}`;
+}
+
+/**
+ * Auto-generates the next certificate number:
+ * - HMV, Transport: Starts from BBC2026/271 and increments (BBC2026/271, BBC2026/272, ...)
+ * - LMV, MCWG, MCWOG: Starts from BBC2026/157 and increments (BBC2026/157, BBC2026/158, ...)
+ */
+export function generateNextCertificateNo(certificates: Certificate[], course: CourseCode): string {
+  const isHeavy = isHeavyVehicleCourse(course);
+  const year = new Date().getFullYear();
+  const baseStart = isHeavy ? 271 : 157;
+
+  const relevantNums: number[] = [];
+  for (const c of certificates) {
+    const cHeavy = isHeavyVehicleCourse(c.course);
+    if (cHeavy === isHeavy) {
+      const match = c.number.match(/^BBC(\d{4})\/(\d+)$/i);
+      if (match && match[1] === String(year)) {
+        const seq = parseInt(match[2]!, 10);
+        if (!isNaN(seq)) {
+          relevantNums.push(seq);
+        }
+      }
+    }
+  }
+
+  const nextSeq = relevantNums.length > 0 ? Math.max(baseStart, Math.max(...relevantNums) + 1) : baseStart;
+  return `BBC${year}/${nextSeq}`;
+}
+
 export function normalizeCertificateNumber(input: string): string {
   return input.trim().toUpperCase().replace(/\s+/g, "");
 }
@@ -231,7 +292,7 @@ export type VerificationResult =
   | { status: "not_found" }
   | { status: "invalid_format" };
 
-const CERT_PATTERN = /^BBC\d{4}\/\d{4}$/;
+const CERT_PATTERN = /^BBC\d{4}\/\d+$/;
 
 export function verifyCertificate(input: string): VerificationResult {
   const number = normalizeCertificateNumber(input);
@@ -413,8 +474,15 @@ export async function getCertificates(): Promise<Certificate[]> {
 
 /** Save or update student in Firestore. */
 export async function saveStudent(student: Student): Promise<void> {
+  const idx = STUDENTS.findIndex((s) => s.id === student.id);
+  if (idx >= 0) {
+    STUDENTS[idx] = { ...STUDENTS[idx]!, ...student };
+  } else {
+    STUDENTS.unshift(student);
+  }
   if (!db) return;
-  const ref = doc(db, "students", student.id);
+  const docId = student.id.replace(/\//g, "-");
+  const ref = doc(db, "students", docId);
   await setDoc(ref, student, { merge: true });
 }
 
@@ -571,8 +639,13 @@ export async function saveAnnouncement(announcement: { id: string | number; titl
 
 /** Delete student from Firestore */
 export async function deleteStudent(id: string): Promise<void> {
+  const idx = STUDENTS.findIndex((s) => s.id === id);
+  if (idx >= 0) {
+    STUDENTS.splice(idx, 1);
+  }
   if (!db) return;
-  await deleteDoc(doc(db, "students", id));
+  const docId = id.replace(/\//g, "-");
+  await deleteDoc(doc(db, "students", docId));
 }
 
 /** Delete certificate from Firestore */

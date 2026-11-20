@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { COURSES, type CourseCode, type Student, formatDateLong, useStudents, saveStudent } from "@/lib/school-data";
+import { COURSES, type CourseCode, type Student, formatDateLong, useStudents, saveStudent, generateNextEnrollmentNo } from "@/lib/school-data";
 
 export const Route = createFileRoute("/admin/students")({
   head: () => ({ meta: [{ title: "Students — BBC Motors Admin" }, { name: "description", content: "All enrolled students." }] }),
@@ -15,15 +15,6 @@ export const Route = createFileRoute("/admin/students")({
 });
 
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown"];
-
-/** Generates next student ID based on the highest existing STU number */
-function nextStudentId(students: Student[]): string {
-  const nums = students
-    .map((s) => parseInt(s.id.replace("STU-", ""), 10))
-    .filter((n) => !isNaN(n));
-  const max = nums.length ? Math.max(...nums) : 1043;
-  return `STU-${max + 1}`;
-}
 
 function FieldRow({ children }: { children: React.ReactNode }) {
   return <div className="grid grid-cols-2 gap-3">{children}</div>;
@@ -51,6 +42,9 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () => void }) {
   const [sameAddress, setSameAddress] = useState(false);
   const [photo, setPhoto] = useState<string>("");
+  const [selectedCourse, setSelectedCourse] = useState<CourseCode>("LMV");
+
+  const previewEnrollmentNo = generateNextEnrollmentNo(students, selectedCourse);
 
   function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -94,8 +88,9 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
     const f = new FormData(e.currentTarget);
     const get = (k: string) => String(f.get(k) ?? "").trim();
 
+    const course = get("course") as CourseCode;
     const next: Student = {
-      id: nextStudentId(students),
+      id: generateNextEnrollmentNo(students, course),
       name: get("name"),
       photo: photo || undefined,
       fatherOrHusbandName: get("fatherOrHusbandName"),
@@ -255,11 +250,23 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
       </FieldRow>
 
       {/* ── Course & Payment ── */}
-      <SectionTitle>Course & Payment</SectionTitle>
+      <div className="flex items-center justify-between border-b border-border pb-1 pt-3">
+        <p className="text-xs font-bold uppercase tracking-widest text-[#164535]">Course & Payment</p>
+        <span className="text-[11px] font-semibold bg-[#EAF1ED] text-[#164535] px-2.5 py-0.5 border border-[#164535]/30">
+          Auto Assigned Roll / Enrol: <strong className="font-mono">{previewEnrollmentNo}</strong>
+        </span>
+      </div>
 
       <FieldRow>
         <Field id="course" label="Class of Vehicle *">
-          <select id="course" name="course" required className={selectCls}>
+          <select
+            id="course"
+            name="course"
+            required
+            value={selectedCourse}
+            onChange={(e) => setSelectedCourse(e.target.value as CourseCode)}
+            className={selectCls}
+          >
             {COURSES.map((c) => <option key={c.code} value={c.code}>{c.name}</option>)}
           </select>
         </Field>
@@ -373,9 +380,9 @@ function StudentsPage() {
           className="mb-4 max-w-sm rounded-none"
         />
         <DataTable
-          head={["ID", "Trainee", "Guardian", "Course", "Fee Paid", "Phone", "Enrolled", "Status"]}
+          head={["Enrollment No", "Trainee", "Guardian", "Course", "Fee Paid", "Phone", "Enrolled", "Status"]}
           rows={filtered.map((s) => [
-            <span className="font-mono text-xs">{s.id}</span>,
+            <span className="font-mono font-bold text-xs text-[#164535] bg-[#EAF1ED] px-2 py-0.5 border border-[#164535]/20">{s.id}</span>,
             <div className="flex items-center gap-2.5">
               {s.photo ? (
                 <img src={s.photo} alt={s.name} className="h-8 w-7 object-cover border border-slate-300 shrink-0" />

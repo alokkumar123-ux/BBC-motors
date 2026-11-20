@@ -46,19 +46,19 @@ const COURSES = [
 ];
 
 const STUDENTS = [
-  { id: "STU-1043", name: "Karan Bose", phone: "9435012345", email: "karan.bose@example.com", course: "LMV", enrolledOn: "2026-11-12", status: "In Progress", progress: 60 },
-  { id: "STU-1042", name: "Rahim Ahmed", phone: "9864023456", email: "rahim.a@example.com", course: "MCWG", enrolledOn: "2026-11-12", status: "Enrolled", progress: 10 },
-  { id: "STU-1041", name: "Priya Baruah", phone: "7002034567", email: "priya.b@example.com", course: "HMV", enrolledOn: "2026-11-11", status: "In Progress", progress: 35 },
-  { id: "STU-1040", name: "Suman Sharma", phone: "9101045678", email: "suman.s@example.com", course: "LMV", enrolledOn: "2026-11-10", status: "In Progress", progress: 45 },
-  { id: "STU-1039", name: "Nabanita Das", phone: "9954056789", email: "nabanita.d@example.com", course: "LMV", enrolledOn: "2026-10-02", status: "Completed", progress: 100 },
-  { id: "STU-1038", name: "Rupam Nath", phone: "8011067890", email: "rupam.n@example.com", course: "MCWG", enrolledOn: "2026-09-21", status: "Completed", progress: 100 },
+  { id: "65/26", name: "Alok Kumar Dey", phone: "9435012345", email: "alok.dey@example.com", course: "LMV", enrolledOn: "2026-11-12", amountPaid: "3500", paymentMethod: "Cash", status: "In Progress", progress: 60 },
+  { id: "66/26", name: "Rahim Ahmed", phone: "9864023456", email: "rahim.a@example.com", course: "MCWG", enrolledOn: "2026-11-12", amountPaid: "1500", paymentMethod: "UPI", status: "Enrolled", progress: 10 },
+  { id: "271/26", name: "Priya Baruah", phone: "7002034567", email: "priya.b@example.com", course: "HMV", enrolledOn: "2026-11-11", amountPaid: "4500", paymentMethod: "Cash", status: "In Progress", progress: 35 },
+  { id: "67/26", name: "Suman Sharma", phone: "9101045678", email: "suman.s@example.com", course: "LMV", enrolledOn: "2026-11-10", amountPaid: "3000", paymentMethod: "Card", status: "In Progress", progress: 45 },
+  { id: "68/26", name: "Nabanita Das", phone: "9954056789", email: "nabanita.d@example.com", course: "LMV", enrolledOn: "2026-10-02", amountPaid: "3500", paymentMethod: "Cash", status: "Completed", progress: 100 },
+  { id: "69/26", name: "Rupam Nath", phone: "8011067890", email: "rupam.n@example.com", course: "MCWG", enrolledOn: "2026-09-21", amountPaid: "1500", paymentMethod: "Cash", status: "Completed", progress: 100 },
 ];
 
 const CERTIFICATES = [
-  { number: "BBC2026/1043", studentId: "STU-1043", studentName: "Karan Bose", course: "LMV", issuedOn: "2026-11-17", status: "Valid" },
-  { number: "BBC2026/1039", studentId: "STU-1039", studentName: "Nabanita Das", course: "LMV", issuedOn: "2026-11-02", status: "Valid" },
-  { number: "BBC2026/1038", studentId: "STU-1038", studentName: "Rupam Nath", course: "MCWG", issuedOn: "2026-10-06", status: "Valid" },
-  { number: "BBC2025/0877", studentId: "STU-0877", studentName: "Hemanta Saikia", course: "HMV", issuedOn: "2025-06-14", status: "Revoked" },
+  { number: "BBC2026/157", studentId: "65/26", studentName: "Alok Kumar Dey", course: "LMV", issuedOn: "2026-11-17", status: "Valid", isReleased: true },
+  { number: "BBC2026/158", studentId: "68/26", studentName: "Nabanita Das", course: "LMV", issuedOn: "2026-11-02", status: "Valid", isReleased: true },
+  { number: "BBC2026/159", studentId: "69/26", studentName: "Rupam Nath", course: "MCWG", issuedOn: "2026-10-06", status: "Valid", isReleased: true },
+  { number: "BBC2026/271", studentId: "271/26", studentName: "Priya Baruah", course: "HMV", issuedOn: "2026-11-18", status: "Valid", isReleased: false },
 ];
 
 const ANNOUNCEMENTS = [
@@ -92,7 +92,8 @@ async function seed() {
 
   // 3. Seed Students
   for (const s of STUDENTS) {
-    await setDoc(doc(db, "students", s.id), s);
+    const docId = s.id.replace(/\//g, "-");
+    await setDoc(doc(db, "students", docId), s);
     console.log(`✓ Uploaded Student: ${s.name} (${s.id})`);
   }
 

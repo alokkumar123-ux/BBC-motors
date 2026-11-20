@@ -25,7 +25,7 @@ function StudentDashboard() {
           Welcome, {s.name} 👋
         </h1>
         <p className="mt-1 text-xs text-muted-foreground">
-          Student ID: <span className="font-mono font-semibold text-slate-700">{s.id}</span> · Phone: {s.phone}
+          Enrollment No: <span className="font-mono font-semibold text-slate-700">{s.id}</span> · Phone: {s.phone}
         </p>
       </div>
       <div className="grid grid-cols-3 gap-3 sm:gap-4">

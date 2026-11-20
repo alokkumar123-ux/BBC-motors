@@ -8,6 +8,7 @@ import {
   formatDateDMY,
   getCourse,
   useStudents,
+  isHeavyVehicleCourse,
 } from "@/lib/school-data";
 
 export function CertificateDocument({ certificate }: { certificate: Certificate }) {
@@ -39,9 +40,9 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
     ? formatDateDMY(student.enrolledOn)
     : formatDateDMY(certificate.issuedOn);
   const serialNo =
-    student?.id?.replace("STU-", "") ||
-    certificate.number.replace(/\D/g, "").slice(-4) ||
-    "157";
+    student?.id ||
+    certificate.studentId ||
+    (isHeavyVehicleCourse(certificate.course) ? "271/26" : "65/26");
   const vehicleClass = course.name;
   const periodFrom = student?.enrolledOn
     ? formatDateDMY(student.enrolledOn)

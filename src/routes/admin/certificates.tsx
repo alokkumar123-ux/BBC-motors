@@ -16,6 +16,7 @@ import {
   toggleCertificateRelease,
   useCertificates,
   useStudents,
+  generateNextCertificateNo,
 } from "@/lib/school-data";
 import { certificateSlug } from "@/lib/certificate-url";
 
@@ -39,6 +40,8 @@ function AdminCertificatesPage() {
   const [selectedStudentId, setSelectedStudentId] = useState("");
   const [certCourse, setCertCourse] = useState<CourseCode>("LMV");
   const [releaseImmediately, setReleaseImmediately] = useState(true);
+
+  const previewCertNo = generateNextCertificateNo(certificates, certCourse);
 
   async function handleToggle(cert: Certificate) {
     const nextState = !cert.isReleased;
@@ -64,9 +67,7 @@ function AdminCertificatesPage() {
       return;
     }
 
-    const year = new Date().getFullYear();
-    const randomSeq = Math.floor(1000 + Math.random() * 9000);
-    const newCertNo = `BBC${year}/${randomSeq}`;
+    const newCertNo = generateNextCertificateNo(certificates, certCourse);
 
     const newCert: Certificate = {
       number: newCertNo,
@@ -111,6 +112,11 @@ function AdminCertificatesPage() {
               </DialogHeader>
 
               <form onSubmit={handleIssueCertificate} className="space-y-4 pt-2">
+                <div className="flex items-center justify-between bg-[#EAF1ED] p-2.5 border border-[#164535]/30">
+                  <span className="text-xs text-muted-foreground font-semibold">Auto Certificate No:</span>
+                  <span className="font-mono font-bold text-sm text-[#164535]">{previewCertNo}</span>
+                </div>
+
                 <div className="space-y-1.5">
                   <Label htmlFor="studentSelect" className="text-xs font-semibold">
                     Select Enrolled Student *
@@ -197,7 +203,7 @@ function AdminCertificatesPage() {
             <span className="font-mono text-xs font-bold text-[#164535]">{c.number}</span>,
             <div>
               <p className="font-semibold text-sm text-slate-800">{c.studentName}</p>
-              <p className="text-[11px] text-muted-foreground font-mono">ID: {c.studentId}</p>
+              <p className="text-[11px] text-muted-foreground font-mono">Enrol No: {c.studentId}</p>
             </div>,
             <span className="font-medium text-xs">{c.course}</span>,
             <span className="text-xs">{formatDateDMY(c.issuedOn)}</span>,
