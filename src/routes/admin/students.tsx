@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { COURSES, type CourseCode, type Student, formatDateLong, useStudents, saveStudent, generateNextEnrollmentNo } from "@/lib/school-data";
+import { COURSES, type CourseCode, type Student, formatDateLong, useStudents, saveStudent, deleteStudent, generateNextEnrollmentNo } from "@/lib/school-data";
 
 export const Route = createFileRoute("/admin/students")({
   head: () => ({ meta: [{ title: "Students — BBC Motors Admin" }, { name: "description", content: "All enrolled students." }] }),
@@ -391,6 +391,24 @@ function StudentsPage() {
   const { students, loading } = useStudents();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  async function handleDelete(s: Student) {
+    if (!confirm(`Are you sure you want to permanently delete trainee ${s.name} (${s.id})?`)) {
+      return;
+    }
+    setDeletingId(s.id);
+    try {
+      await deleteStudent(s.id);
+      toast.success(`Student ${s.name} (${s.id}) deleted successfully`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete student");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   const filtered = students.filter((s) =>
     (s.name + s.id + s.phone + (s.fatherOrHusbandName ?? "")).toLowerCase().includes(query.toLowerCase())
   );
@@ -430,7 +448,7 @@ function StudentsPage() {
           className="mb-4 max-w-sm rounded-none"
         />
         <DataTable
-          head={["Enrollment No", "Trainee", "Guardian", "Course", "Fee Paid", "Phone", "Enrolled", "Status"]}
+          head={["Enrollment No", "Trainee", "Guardian", "Course", "Fee Paid", "Phone", "Enrolled", "Status", "Action"]}
           rows={filtered.map((s) => [
             <span className="font-mono font-bold text-xs text-[#164535] bg-[#EAF1ED] px-2 py-0.5 border border-[#164535]/20">{s.id}</span>,
             <div className="flex items-center gap-2.5">
@@ -470,6 +488,16 @@ function StudentsPage() {
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>,
+            <button
+              type="button"
+              disabled={deletingId === s.id}
+              onClick={() => handleDelete(s)}
+              title="Delete Student"
+              className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-destructive border border-destructive/30 hover:bg-destructive hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              <span>{deletingId === s.id ? "Deleting..." : "Delete"}</span>
+            </button>,
           ])}
         />
       </Panel>
