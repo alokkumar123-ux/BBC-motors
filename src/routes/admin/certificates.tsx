@@ -13,6 +13,7 @@ import {
   type CourseCode,
   formatDateDMY,
   saveCertificate,
+  saveStudent,
   deleteCertificate,
   toggleCertificateRelease,
   useCertificates,
@@ -44,6 +45,10 @@ function AdminCertificatesPage() {
   const [releaseImmediately, setReleaseImmediately] = useState(true);
 
   const previewCertNo = generateNextCertificateNo(certificates, certCourse);
+
+  // Only students who do not yet have an issued certificate should appear
+  const issuedStudentIds = new Set(certificates.map((c) => c.studentId));
+  const availableStudents = students.filter((s) => !issuedStudentIds.has(s.id));
 
   async function handleDeleteCertificate(cert: Certificate) {
     if (!confirm(`Are you sure you want to permanently delete certificate ${cert.number} issued to ${cert.studentName}?`)) {
@@ -99,7 +104,11 @@ function AdminCertificatesPage() {
     };
 
     await saveCertificate(newCert);
+    if (student.status !== "Completed") {
+      await saveStudent({ ...student, status: "Completed", progress: 100 });
+    }
     toast.success(`Certificate ${newCert.number} issued for ${newCert.studentName}`);
+    setSelectedStudentId("");
     setOpen(false);
   }
 
@@ -113,7 +122,15 @@ function AdminCertificatesPage() {
             : `${certificates.length} certificates registered · Manage student view & download access`
         }
         action={
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog
+            open={open}
+            onOpenChange={(val) => {
+              setOpen(val);
+              if (!val) {
+                setSelectedStudentId("");
+              }
+            }}
+          >
             <DialogTrigger asChild>
               <Button className="bg-[#164535] hover:bg-[#0e2c22] text-white rounded-none">
                 <FilePlus2 className="h-4 w-4" /> Issue Certificate
@@ -145,13 +162,17 @@ function AdminCertificatesPage() {
                     value={selectedStudentId}
                     onChange={(e) => {
                       setSelectedStudentId(e.target.value);
-                      const s = students.find((item) => item.id === e.target.value);
+                      const s = availableStudents.find((item) => item.id === e.target.value);
                       if (s) setCertCourse(s.course);
                     }}
                     className="h-9 w-full border border-input bg-background px-3 text-sm rounded-none focus:outline-none focus:ring-1 focus:ring-[#164535]"
                   >
-                    <option value="">— Select Trainee —</option>
-                    {students.map((s) => (
+                    <option value="">
+                      {availableStudents.length === 0
+                        ? "— All enrolled students already have certificates —"
+                        : "— Select Trainee —"}
+                    </option>
+                    {availableStudents.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name} ({s.id}) · {s.course}
                       </option>
@@ -172,7 +193,7 @@ function AdminCertificatesPage() {
                   >
                     {COURSES.map((c) => (
                       <option key={c.code} value={c.code}>
-                        {c.name} ({c.code})
+                        {c.name}
                       </option>
                     ))}
                   </select>
@@ -198,7 +219,8 @@ function AdminCertificatesPage() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-[#164535] hover:bg-[#0e2c22] text-white rounded-none font-semibold text-xs py-2.5"
+                  disabled={!selectedStudentId || availableStudents.length === 0}
+                  className="w-full bg-[#164535] hover:bg-[#0e2c22] text-white rounded-none font-semibold text-xs py-2.5 disabled:opacity-50"
                 >
                   Confirm &amp; Issue Certificate
                 </Button>
