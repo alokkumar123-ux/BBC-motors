@@ -179,6 +179,17 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
       {/* ── Personal Information ── */}
       <SectionTitle>Personal Information</SectionTitle>
 
+      <Field id="enrollmentNo" label="Enrollment No (Auto-Generated)">
+        <input
+          id="enrollmentNo"
+          name="enrollmentNo"
+          value={previewEnrollmentNo}
+          readOnly
+          tabIndex={-1}
+          className={`${inputCls} bg-muted/60 font-mono font-bold text-[#164535] cursor-not-allowed border-[#164535]/30`}
+        />
+      </Field>
+
       <Field id="name" label="Full Name of Trainee *">
         <input id="name" name="name" required placeholder="e.g. Alok Kumar Dey" className={inputCls} />
       </Field>
