@@ -193,7 +193,7 @@ function Index() {
             {/* Left Description */}
             <div className="space-y-5">
               <h2 className="text-3xl font-extrabold tracking-tight text-[#164535] sm:text-4xl">
-                About BBC Motors
+                About BBC Motor
               </h2>
               <p className="text-base leading-relaxed text-slate-700 max-w-xl">
                 BBC Motors Driving School is a Govt. authorized driving school, committed to provide quality

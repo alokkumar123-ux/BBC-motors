@@ -579,7 +579,11 @@ export async function deleteStudent(id: string): Promise<void> {
 
 /** Delete certificate from Firestore */
 export async function deleteCertificate(number: string): Promise<void> {
+  const idx = CERTIFICATES.findIndex((c) => c.number === number);
+  if (idx >= 0) {
+    CERTIFICATES.splice(idx, 1);
+  }
   if (!db) return;
-  const slug = number.replace("/", "-");
+  const slug = number.replace(/\//g, "-");
   await deleteDoc(doc(db, "certificates", slug));
 }

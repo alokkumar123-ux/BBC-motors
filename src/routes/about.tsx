@@ -13,7 +13,7 @@ export const Route = createFileRoute("/about")({
         content:
           "Official Government of Assam authorized driving school in Karimganj (Licence: DTK/MDLS/02/2004), training safe and disciplined drivers since 2004.",
       },
-      { property: "og:title", content: "About BBC Motors Driving School" },
+      { property: "og:title", content: "About BBC Motor Driving School" },
       {
         property: "og:description",
         content: "Authorised driving school in Karimganj, Assam, training safe drivers since 2004.",
@@ -34,7 +34,7 @@ const VALUES = [
 function AboutPage() {
   return (
     <SiteLayout>
-      <PageIntro eyebrow="Institute Profile" title="About BBC Motors Driving School">
+      <PageIntro eyebrow="Institute Profile" title="About BBC Motor Driving School">
         Authorized by the Transport Department, Government of Assam (Licence: {SCHOOL.licenceNo}).
         Training safe, confident, and defensive drivers in Karimganj for over 20 years.
       </PageIntro>

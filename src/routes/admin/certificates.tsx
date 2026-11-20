@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Eye, FileBadge, FilePlus2, Lock, ShieldCheck, Unlock } from "lucide-react";
+import { Check, Eye, FileBadge, FilePlus2, Lock, ShieldCheck, Trash2, Unlock } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { DataTable, PageHeading, Panel, StatusPill } from "@/components/portal/PortalShell";
@@ -13,6 +13,7 @@ import {
   type CourseCode,
   formatDateDMY,
   saveCertificate,
+  deleteCertificate,
   toggleCertificateRelease,
   useCertificates,
   useStudents,
@@ -35,6 +36,7 @@ function AdminCertificatesPage() {
   const { students } = useStudents();
   const [open, setOpen] = useState(false);
   const [toggling, setToggling] = useState<string | null>(null);
+  const [deletingCertNo, setDeletingCertNo] = useState<string | null>(null);
 
   // Form state for issuing a new certificate
   const [selectedStudentId, setSelectedStudentId] = useState("");
@@ -42,6 +44,22 @@ function AdminCertificatesPage() {
   const [releaseImmediately, setReleaseImmediately] = useState(true);
 
   const previewCertNo = generateNextCertificateNo(certificates, certCourse);
+
+  async function handleDeleteCertificate(cert: Certificate) {
+    if (!confirm(`Are you sure you want to permanently delete certificate ${cert.number} issued to ${cert.studentName}?`)) {
+      return;
+    }
+    setDeletingCertNo(cert.number);
+    try {
+      await deleteCertificate(cert.number);
+      toast.success(`Certificate ${cert.number} deleted successfully`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete certificate");
+    } finally {
+      setDeletingCertNo(null);
+    }
+  }
 
   async function handleToggle(cert: Certificate) {
     const nextState = !cert.isReleased;
@@ -198,7 +216,7 @@ function AdminCertificatesPage() {
         </div>
 
         <DataTable
-          head={["Certificate No", "Student Name", "Course", "Issued", "Status", "Student Download Access", "Preview"]}
+          head={["Certificate No", "Student Name", "Course", "Issued", "Status", "Student Download Access", "Preview", "Action"]}
           rows={certificates.map((c) => [
             <span className="font-mono text-xs font-bold text-[#164535]">{c.number}</span>,
             <div>
@@ -241,6 +259,18 @@ function AdminCertificatesPage() {
             >
               <Eye className="h-3.5 w-3.5" /> View
             </Link>,
+
+            /* Delete Certificate Button */
+            <button
+              type="button"
+              disabled={deletingCertNo === c.number}
+              onClick={() => handleDeleteCertificate(c)}
+              title="Delete Certificate"
+              className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-destructive border border-destructive/30 hover:bg-destructive hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              <span>{deletingCertNo === c.number ? "Deleting..." : "Delete"}</span>
+            </button>,
           ])}
         />
       </Panel>
