@@ -233,40 +233,48 @@ function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {students.slice(0, 5).map((r, i) => (
-                  <tr key={r.id} className="hover:bg-muted/40">
-                    <td className="py-2.5">
-                      <div className="flex items-center gap-2.5">
-                        <span
-                          className={`grid h-8 w-8 shrink-0 place-items-center text-xs font-bold ${
-                            AVATAR_TONES[i % 4]
-                          }`}
-                        >
-                          {initials(r.name)}
-                        </span>
-                        <div>
-                          <p className="font-bold text-slate-800">{r.name}</p>
-                          <p className="text-[11px] text-muted-foreground">Enrol: {r.id}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-2.5 font-medium text-slate-700">{r.course}</td>
-                    <td className="py-2.5 font-mono text-muted-foreground">{r.phone}</td>
-                    <td className="py-2.5">
-                      <span
-                        className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                          r.status === "Completed"
-                            ? "bg-emerald-100 text-emerald-800"
-                            : r.status === "In Progress"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-amber-100 text-amber-800"
-                        }`}
-                      >
-                        {r.status}
-                      </span>
+                {students.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-8 text-center text-xs text-muted-foreground">
+                      No registered students yet. Click &ldquo;Add Student&rdquo; to begin.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  students.slice(0, 5).map((r, i) => (
+                    <tr key={r.id} className="hover:bg-muted/40">
+                      <td className="py-2.5">
+                        <div className="flex items-center gap-2.5">
+                          <span
+                            className={`grid h-8 w-8 shrink-0 place-items-center text-xs font-bold ${
+                              AVATAR_TONES[i % 4]
+                            }`}
+                          >
+                            {initials(r.name)}
+                          </span>
+                          <div>
+                            <p className="font-bold text-slate-800">{r.name}</p>
+                            <p className="text-[11px] text-muted-foreground">Enrol: {r.id}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-2.5 font-medium text-slate-700">{r.course}</td>
+                      <td className="py-2.5 font-mono text-muted-foreground">{r.phone}</td>
+                      <td className="py-2.5">
+                        <span
+                          className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                            r.status === "Completed"
+                              ? "bg-emerald-100 text-emerald-800"
+                              : r.status === "In Progress"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-amber-100 text-amber-800"
+                          }`}
+                        >
+                          {r.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

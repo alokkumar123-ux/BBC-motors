@@ -104,118 +104,28 @@ export const COURSES: Course[] = [
   },
 ];
 
-export const STUDENTS: Student[] = [
-  {
-    id: "65/26", name: "Alok Kumar Dey", fatherOrHusbandName: "Ratan Dey", gender: "Male",
-    dob: "1998-05-14", bloodGroup: "B+", qualification: "Graduate", occupation: "Private Job",
-    permanentAddress: "Ward No 5, Karimganj", presentAddress: "Ward No 5, Karimganj",
-    phone: "9435012345", email: "alok.dey@example.com", course: "LMV",
-    enrolledOn: "2026-11-12", completionDate: "", learnerLicenseNo: "", learnerLicenseExpiry: "",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", amountPaid: "3500", paymentMethod: "Cash", remarks: "",
-    status: "In Progress", progress: 60,
-  },
-  {
-    id: "66/26", name: "Rahim Ahmed", fatherOrHusbandName: "Karim Ahmed", gender: "Male",
-    dob: "2001-03-20", bloodGroup: "O+", qualification: "12th Pass", occupation: "Student",
-    permanentAddress: "Nilambazar, Karimganj", presentAddress: "Nilambazar, Karimganj",
-    phone: "9864023456", email: "rahim.a@example.com", course: "MCWG",
-    enrolledOn: "2026-11-12", completionDate: "", learnerLicenseNo: "", learnerLicenseExpiry: "",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", amountPaid: "1500", paymentMethod: "UPI", remarks: "",
-    status: "Enrolled", progress: 10,
-  },
-  {
-    id: "271/26", name: "Priya Baruah", fatherOrHusbandName: "Bikash Baruah", gender: "Female",
-    dob: "1995-08-10", bloodGroup: "A+", qualification: "Graduate", occupation: "Homemaker",
-    permanentAddress: "Station Road, Karimganj", presentAddress: "Station Road, Karimganj",
-    phone: "7002034567", email: "priya.b@example.com", course: "HMV",
-    enrolledOn: "2026-11-11", completionDate: "", learnerLicenseNo: "AS09-20250011", learnerLicenseExpiry: "2027-05-10",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", amountPaid: "4500", paymentMethod: "Cash", remarks: "",
-    status: "In Progress", progress: 35,
-  },
-  {
-    id: "67/26", name: "Suman Sharma", fatherOrHusbandName: "Dinesh Sharma", gender: "Male",
-    dob: "1990-12-01", bloodGroup: "AB+", qualification: "10th Pass", occupation: "Business",
-    permanentAddress: "Ramnagar, Karimganj", presentAddress: "Ramnagar, Karimganj",
-    phone: "9101045678", email: "suman.s@example.com", course: "LMV",
-    enrolledOn: "2026-11-10", completionDate: "", learnerLicenseNo: "", learnerLicenseExpiry: "",
-    drivingLicenseNo: "", drivingLicenseIssueDate: "", amountPaid: "3000", paymentMethod: "Card", remarks: "",
-    status: "In Progress", progress: 45,
-  },
-  {
-    id: "68/26", name: "Nabanita Das", fatherOrHusbandName: "Narayan Das", gender: "Female",
-    dob: "1997-07-22", bloodGroup: "B-", qualification: "Graduate", occupation: "Teacher",
-    permanentAddress: "Tarapur, Karimganj", presentAddress: "Tarapur, Karimganj",
-    phone: "9954056789", email: "nabanita.d@example.com", course: "LMV",
-    enrolledOn: "2026-10-02", completionDate: "2026-11-02", learnerLicenseNo: "AS09-20240789", learnerLicenseExpiry: "2026-12-01",
-    drivingLicenseNo: "AS09 20261039", drivingLicenseIssueDate: "2026-11-05", amountPaid: "3500", paymentMethod: "Cash", remarks: "",
-    status: "Completed", progress: 100,
-  },
-  {
-    id: "69/26", name: "Rupam Nath", fatherOrHusbandName: "Dilip Nath", gender: "Male",
-    dob: "1993-11-15", bloodGroup: "O-", qualification: "12th Pass", occupation: "Driver",
-    permanentAddress: "Badarpur, Karimganj", presentAddress: "Badarpur, Karimganj",
-    phone: "8011067890", email: "rupam.n@example.com", course: "MCWG",
-    enrolledOn: "2026-09-21", completionDate: "2026-10-06", learnerLicenseNo: "AS09-20231122", learnerLicenseExpiry: "2025-11-01",
-    drivingLicenseNo: "AS09 20261038", drivingLicenseIssueDate: "2026-10-10", amountPaid: "1500", paymentMethod: "Cash", remarks: "",
-    status: "Completed", progress: 100,
-  },
-];
+export const STUDENTS: Student[] = [];
 
-export const CERTIFICATES: Certificate[] = [
-  { number: "BBC2026/157", studentId: "65/26", studentName: "Alok Kumar Dey", course: "LMV", issuedOn: "2026-11-17", status: "Valid", isReleased: false },
-  { number: "BBC2026/158", studentId: "68/26", studentName: "Nabanita Das", course: "LMV", issuedOn: "2026-11-02", status: "Valid", isReleased: true },
-  { number: "BBC2026/159", studentId: "69/26", studentName: "Rupam Nath", course: "MCWG", issuedOn: "2026-10-06", status: "Valid", isReleased: true },
-  { number: "BBC2026/271", studentId: "271/26", studentName: "Priya Baruah", course: "HMV", issuedOn: "2026-11-18", status: "Valid", isReleased: false },
-];
+export const CERTIFICATES: Certificate[] = [];
 
 export const DASHBOARD_STATS = [
-  { key: "students", label: "Total Students", value: 2482, change: 12 },
-  { key: "certificates", label: "Total Certificates", value: 2320, change: 10 },
-  { key: "valid", label: "Valid Certificates", value: 2318, change: 99.9 },
-  { key: "suspicious", label: "Suspicious Attempts", value: 3, change: -1 },
+  { key: "students", label: "Total Students", value: 0, change: 0 },
+  { key: "certificates", label: "Total Certificates", value: 0, change: 0 },
+  { key: "valid", label: "Valid Certificates", value: 0, change: 0 },
+  { key: "suspicious", label: "Suspicious Attempts", value: 0, change: 0 },
 ] as const;
 
-export const CERTIFICATE_TREND = [
-  { month: "May", count: 420 },
-  { month: "Jun", count: 690 },
-  { month: "Jul", count: 790 },
-  { month: "Aug", count: 920 },
-  { month: "Sep", count: 1010 },
-  { month: "Oct", count: 1240 },
-];
+export const CERTIFICATE_TREND: Array<{ month: string; count: number }> = [];
 
-export const RECENT_REGISTRATIONS = [
-  { name: "Alok Kumar Dey", course: "LMV", ago: "2 mins ago" },
-  { name: "Rahim Ahmed", course: "MCWG", ago: "5 mins ago" },
-  { name: "Priya Baruah", course: "Transport", ago: "12 mins ago" },
-  { name: "Suman Sharma", course: "LMV", ago: "15 mins ago" },
-];
+export const RECENT_REGISTRATIONS: Array<{ name: string; course: string; ago: string }> = [];
 
-export const LATEST_ACTIVITY = [
-  { kind: "verified", text: "Certificate verified: #BBC2026/1043", ago: "2m ago" },
-  { kind: "registered", text: "New student registered: Alok Kumar Dey", ago: "5m ago" },
-  { kind: "failed", text: "Payment failed: Rahim Ahmed", ago: "8m ago" },
-] as const;
+export const LATEST_ACTIVITY: Array<{ kind: string; text: string; ago: string }> = [];
 
-export const VERIFICATION_LOGS = [
-  { id: 1, number: "BBC2026/1043", result: "Valid", ip: "103.21.44.10", at: "2026-11-17 10:42" },
-  { id: 2, number: "BBC2026/9999", result: "Not Found", ip: "49.36.12.88", at: "2026-11-17 10:15" },
-  { id: 3, number: "BBC2025/0877", result: "Revoked", ip: "157.45.3.201", at: "2026-11-16 18:03" },
-  { id: 4, number: "BBC2026/1039", result: "Valid", ip: "103.21.44.10", at: "2026-11-16 12:30" },
-];
+export const VERIFICATION_LOGS: Array<{ id: number; number: string; result: "Valid" | "Revoked" | "Not Found"; ip: string; at: string }> = [];
 
-export const PAYMENTS = [
-  { id: "PAY-5521", student: "Alok Kumar Dey", amount: 6500, method: "UPI", status: "Paid", date: "2026-11-12" },
-  { id: "PAY-5520", student: "Rahim Ahmed", amount: 3000, method: "Card", status: "Failed", date: "2026-11-12" },
-  { id: "PAY-5519", student: "Priya Baruah", amount: 12000, method: "Cash", status: "Paid", date: "2026-11-11" },
-  { id: "PAY-5518", student: "Suman Sharma", amount: 6500, method: "UPI", status: "Pending", date: "2026-11-10" },
-];
+export const PAYMENTS: Array<{ id: string; student: string; amount: number; method: string; status: "Paid" | "Failed" | "Pending"; date: string }> = [];
 
-export const ANNOUNCEMENTS = [
-  { id: 1, title: "Driving test slots open for December", date: "2026-11-15", audience: "All students" },
-  { id: 2, title: "Office closed on 25 November", date: "2026-11-10", audience: "All students" },
-  { id: 3, title: "New Transport batch starts 1 December", date: "2026-11-05", audience: "Transport" },
-];
+export const ANNOUNCEMENTS: Array<{ id: string | number; title: string; date: string; audience: string }> = [];
 
 export function getCourse(code: CourseCode): Course {
   return COURSES.find((c) => c.code === code) ?? COURSES[0]!;
@@ -327,7 +237,34 @@ export function initials(name: string): string {
 }
 
 /** The default student fallback. */
-export const CURRENT_STUDENT = STUDENTS[0]!;
+export const DEFAULT_EMPTY_STUDENT: Student = {
+  id: "—",
+  name: "Student",
+  fatherOrHusbandName: "",
+  gender: "Male",
+  dob: "",
+  bloodGroup: "",
+  qualification: "",
+  occupation: "",
+  permanentAddress: "",
+  presentAddress: "",
+  phone: "",
+  email: "",
+  course: "LMV",
+  enrolledOn: new Date().toISOString().slice(0, 10),
+  completionDate: "",
+  learnerLicenseNo: "",
+  learnerLicenseExpiry: "",
+  drivingLicenseNo: "",
+  drivingLicenseIssueDate: "",
+  amountPaid: "0",
+  paymentMethod: "",
+  remarks: "",
+  status: "Enrolled",
+  progress: 0,
+};
+
+export const CURRENT_STUDENT: Student = DEFAULT_EMPTY_STUDENT;
 
 /** Authenticate student by their 10-digit registered mobile number */
 export async function authenticateStudentByPhone(phoneInput: string): Promise<Student | null> {
@@ -449,13 +386,11 @@ export async function getStudents(): Promise<Student[]> {
   if (!db) return STUDENTS;
   try {
     const snap = await getDocs(collection(db, "students"));
-    if (!snap.empty) {
-      return snap.docs.map((d) => d.data() as Student);
-    }
+    return snap.docs.map((d) => d.data() as Student);
   } catch (err) {
     console.warn("Failed to fetch students from Firestore:", err);
   }
-  return STUDENTS;
+  return [];
 }
 
 /** Fetch all certificates from Firestore, falling back to local list. */
@@ -463,13 +398,11 @@ export async function getCertificates(): Promise<Certificate[]> {
   if (!db) return CERTIFICATES;
   try {
     const snap = await getDocs(collection(db, "certificates"));
-    if (!snap.empty) {
-      return snap.docs.map((d) => d.data() as Certificate);
-    }
+    return snap.docs.map((d) => d.data() as Certificate);
   } catch (err) {
     console.warn("Failed to fetch certificates from Firestore:", err);
   }
-  return CERTIFICATES;
+  return [];
 }
 
 /** Save or update student in Firestore. */
@@ -523,10 +456,8 @@ export function useStudents(): { students: Student[]; loading: boolean } {
     const unsub = onSnapshot(
       collection(db, "students"),
       (snap) => {
-        if (!snap.empty) {
-          const list = snap.docs.map((d) => d.data() as Student);
-          setStudents(list);
-        }
+        const list = snap.docs.map((d) => d.data() as Student);
+        setStudents(list);
         setLoading(false);
       },
       (err) => {
@@ -553,10 +484,8 @@ export function useCertificates(): { certificates: Certificate[]; loading: boole
     const unsub = onSnapshot(
       collection(db, "certificates"),
       (snap) => {
-        if (!snap.empty) {
-          const list = snap.docs.map((d) => d.data() as Certificate);
-          setCertificates(list);
-        }
+        const list = snap.docs.map((d) => d.data() as Certificate);
+        setCertificates(list);
         setLoading(false);
       },
       (err) => {
@@ -586,6 +515,8 @@ export function useCourses(): { courses: Course[]; loading: boolean } {
         if (!snap.empty) {
           const list = snap.docs.map((d) => d.data() as Course);
           setCourses(list);
+        } else {
+          setCourses(COURSES);
         }
         setLoading(false);
       },
@@ -613,10 +544,8 @@ export function useAnnouncements(): { announcements: Array<{ id: string | number
     const unsub = onSnapshot(
       collection(db, "announcements"),
       (snap) => {
-        if (!snap.empty) {
-          const list = snap.docs.map((d) => d.data() as { id: string | number; title: string; date: string; audience: string });
-          setAnnouncements(list);
-        }
+        const list = snap.docs.map((d) => d.data() as { id: string | number; title: string; date: string; audience: string });
+        setAnnouncements(list);
         setLoading(false);
       },
       (err) => {
