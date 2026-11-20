@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Camera, Image as ImageIcon, Trash2, Upload, UserPlus } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { DataTable, PageHeading, Panel, StatusPill } from "@/components/portal/PortalShell";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,7 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
   const [sameAddress, setSameAddress] = useState(false);
   const [photo, setPhoto] = useState<string>("");
   const [selectedCourse, setSelectedCourse] = useState<CourseCode>("LMV");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const previewEnrollmentNo = generateNextEnrollmentNo(students, selectedCourse);
 
@@ -50,37 +51,59 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select a valid image file (JPG, PNG)");
+      return;
+    }
+
     // Read and compress image to reasonable dimensions for Firestore document storage
     const reader = new FileReader();
+    reader.onerror = () => {
+      toast.error("Could not read image file");
+    };
     reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      if (!base64) return;
+
+      // Immediately display the photo preview so the user sees it instantly
+      setPhoto(base64);
+      toast.success("Passport photo selected");
+
+      // Background compression to save bandwidth & Firestore storage
       const img = new Image();
       img.onload = () => {
-        const canvas = document.createElement("canvas");
-        let width = img.width;
-        let height = img.height;
-        const maxDim = 360;
+        try {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 360;
 
-        if (width > height && width > maxDim) {
-          height = Math.round((height * maxDim) / width);
-          width = maxDim;
-        } else if (height > maxDim) {
-          width = Math.round((width * maxDim) / height);
-          height = maxDim;
-        }
+          if (width > height && width > maxDim) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else if (height > maxDim) {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
 
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height);
-          const compressed = canvas.toDataURL("image/jpeg", 0.85);
-          setPhoto(compressed);
-          toast.success("Passport photo uploaded successfully");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressed = canvas.toDataURL("image/jpeg", 0.82);
+            setPhoto(compressed);
+          }
+        } catch {
+          // Keep original base64 if canvas is unavailable
         }
       };
-      img.src = event.target?.result as string;
+      img.src = base64;
     };
     reader.readAsDataURL(file);
+
+    // Reset so selecting the same file again triggers onChange
+    e.target.value = "";
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -132,16 +155,26 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
       <div className="border border-border/80 bg-muted/20 p-4">
         <div className="flex flex-col sm:flex-row items-center gap-4">
           {/* Photo Preview Box (Passport Size 3:4) */}
-          <div className="relative h-28 w-24 shrink-0 border-2 border-dashed border-[#164535]/40 bg-white grid place-items-center overflow-hidden">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            title="Click to select photo"
+            className="group relative h-28 w-24 shrink-0 border-2 border-dashed border-[#164535]/40 hover:border-[#164535] bg-white grid place-items-center overflow-hidden transition-colors cursor-pointer"
+          >
             {photo ? (
-              <img src={photo} alt="Trainee preview" className="h-full w-full object-cover" />
+              <>
+                <img src={photo} alt="Trainee preview" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[10px] font-semibold">
+                  Change
+                </div>
+              </>
             ) : (
-              <div className="text-center p-2">
-                <Camera className="mx-auto h-6 w-6 text-slate-400" />
-                <span className="text-[10px] text-muted-foreground block mt-1">Photo</span>
+              <div className="text-center p-2 group-hover:text-[#164535]">
+                <Camera className="mx-auto h-6 w-6 text-slate-400 group-hover:text-[#164535] transition-colors" />
+                <span className="text-[10px] text-muted-foreground block mt-1 font-medium">Click to Add</span>
               </div>
             )}
-          </div>
+          </button>
 
           <div className="flex-1 space-y-1.5 text-center sm:text-left">
             <Label className="text-xs font-bold uppercase tracking-wider text-[#164535]">
@@ -151,22 +184,28 @@ function AddStudentForm({ students, onDone }: { students: Student[]; onDone: () 
               Upload passport-sized photo for Admission Form &amp; Driving Certificate (JPG, PNG).
             </p>
             <div className="flex flex-wrap items-center gap-2 pt-1">
-              <label className="cursor-pointer inline-flex items-center gap-1.5 border border-[#164535] bg-[#164535] hover:bg-[#0e2c22] px-3 py-1.5 text-xs font-semibold text-white transition-colors">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="inline-flex items-center gap-1.5 border border-[#164535] bg-[#164535] hover:bg-[#0e2c22] px-3 py-1.5 text-xs font-semibold text-white transition-colors cursor-pointer"
+              >
                 <Upload className="h-3.5 w-3.5" />
                 <span>{photo ? "Change Photo" : "Upload Photo"}</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoUpload}
-                  className="hidden"
-                />
-              </label>
+              </button>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="hidden"
+              />
 
               {photo && (
                 <button
                   type="button"
                   onClick={() => setPhoto("")}
-                  className="inline-flex items-center gap-1 border border-destructive/40 text-destructive hover:bg-destructive/10 px-2.5 py-1.5 text-xs font-semibold"
+                  className="inline-flex items-center gap-1 border border-destructive/40 text-destructive hover:bg-destructive/10 px-2.5 py-1.5 text-xs font-semibold cursor-pointer"
                 >
                   <Trash2 className="h-3 w-3" /> Remove
                 </button>
