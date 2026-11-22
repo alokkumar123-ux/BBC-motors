@@ -259,7 +259,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
             </div>
 
             {/* Line 10: Fitness and responsibility guarantee */}
-            <div className="mt-2.5 print:mt-1.5 border-l-4 border-[#C59E53] bg-[#F5F4EF] p-2 text-xs print:text-[11px] font-sans italic text-slate-700">
+            <div className="mt-2.5 print:mt-1.5 border-l-4 border-[#C59E53] bg-[#F5F4EF] p-2 text-xs print:text-[11px] font-sans font-bold italic text-slate-900">
               <p>
                 “I am satisfied with his / her physical fitness and sense of responsibility.”
               </p>
