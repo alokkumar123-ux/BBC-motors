@@ -409,9 +409,10 @@ function StudentsPage() {
     }
   }
 
-  const filtered = students.filter((s) =>
-    (s.name + s.id + s.phone + (s.fatherOrHusbandName ?? "")).toLowerCase().includes(query.toLowerCase())
-  );
+  const filtered = students.filter((s) => {
+    const haystack = [s.name, s.id, s.phone, s.fatherOrHusbandName].filter(Boolean).join(" ").toLowerCase();
+    return haystack.includes(query.toLowerCase());
+  });
 
   return (
     <>

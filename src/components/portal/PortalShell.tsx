@@ -155,13 +155,21 @@ export function DataTable({ head, rows }: { head: string[]; rows: ReactNode[][] 
           </tr>
         </thead>
         <tbody>
-          {rows.map((cells, i) => (
-            <tr key={i} className="border-b last:border-0 hover:bg-muted/50">
-              {cells.map((c, j) => (
-                <td key={j} className="px-3 py-3">{c}</td>
-              ))}
+          {rows.length === 0 ? (
+            <tr>
+              <td colSpan={head.length} className="px-3 py-8 text-center text-xs text-muted-foreground">
+                No records found.
+              </td>
             </tr>
-          ))}
+          ) : (
+            rows.map((cells, i) => (
+              <tr key={i} className="border-b last:border-0 hover:bg-muted/50">
+                {cells.map((c, j) => (
+                  <td key={j} className="px-3 py-3">{c}</td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

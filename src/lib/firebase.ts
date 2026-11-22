@@ -3,15 +3,15 @@ import { getFirestore, type Firestore } from "firebase/firestore";
 import { getAuth, type Auth } from "firebase/auth";
 import { getAnalytics, isSupported, type Analytics } from "firebase/analytics";
 
-const env = import.meta.env;
+const env = import.meta.env ?? {};
 const firebaseConfig = {
-  apiKey: env["VITE_FIREBASE_API_KEY"],
-  authDomain: env["VITE_FIREBASE_AUTH_DOMAIN"],
-  projectId: env["VITE_FIREBASE_PROJECT_ID"],
-  storageBucket: env["VITE_FIREBASE_STORAGE_BUCKET"],
-  messagingSenderId: env["VITE_FIREBASE_MESSAGING_SENDER_ID"],
-  appId: env["VITE_FIREBASE_APP_ID"],
-  measurementId: env["VITE_FIREBASE_MEASUREMENT_ID"],
+  apiKey: env["VITE_FIREBASE_API_KEY"] || "AIzaSyDzfStRidwuP_WLKBOgyW_T81hpPI24Z-o",
+  authDomain: env["VITE_FIREBASE_AUTH_DOMAIN"] || "bbcmotors.firebaseapp.com",
+  projectId: env["VITE_FIREBASE_PROJECT_ID"] || "bbcmotors",
+  storageBucket: env["VITE_FIREBASE_STORAGE_BUCKET"] || "bbcmotors.firebasestorage.app",
+  messagingSenderId: env["VITE_FIREBASE_MESSAGING_SENDER_ID"] || "647938049215",
+  appId: env["VITE_FIREBASE_APP_ID"] || "1:647938049215:web:b4129167c89b20518a720a",
+  measurementId: env["VITE_FIREBASE_MEASUREMENT_ID"] || "G-DNKBH5TL57",
 };
 
 export const isFirebaseConfigured = Boolean(
