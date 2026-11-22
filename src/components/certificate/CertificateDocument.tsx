@@ -241,7 +241,7 @@ export function CertificateDocument({ certificate }: { certificate: Certificate 
 
             {/* Line 8 & 9 */}
             <div className="flex flex-wrap items-baseline gap-1.5">
-              <span className="text-slate-600">
+              <span className="font-bold text-[#164535]">
                 (mention class of vehicle) according to the syllabus prescribed for a period from
               </span>
               <span className="w-28 sm:w-32 border-b border-slate-400 pb-0.5 font-sans font-semibold text-slate-900 text-center">
