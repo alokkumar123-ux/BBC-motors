@@ -428,7 +428,7 @@ export async function saveCertificate(cert: Certificate): Promise<void> {
     CERTIFICATES.push(cert);
   }
   if (!db) return;
-  const ref = doc(db, "certificates", cert.number.replace("/", "-"));
+  const ref = doc(db, "certificates", cert.number.replace(/\//g, "-"));
   await setDoc(ref, cert, { merge: true });
 }
 
@@ -439,7 +439,7 @@ export async function toggleCertificateRelease(certNumber: string, isReleased: b
     CERTIFICATES[idx]!.isReleased = isReleased;
   }
   if (!db) return;
-  const ref = doc(db, "certificates", certNumber.replace("/", "-"));
+  const ref = doc(db, "certificates", certNumber.replace(/\//g, "-"));
   await setDoc(ref, { isReleased }, { merge: true });
 }
 

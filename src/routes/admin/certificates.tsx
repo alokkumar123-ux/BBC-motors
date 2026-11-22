@@ -42,6 +42,7 @@ function AdminCertificatesPage() {
   // Form state for issuing a new certificate
   const [selectedStudentId, setSelectedStudentId] = useState("");
   const [certCourse, setCertCourse] = useState<CourseCode>("LMV");
+  const [issueDate, setIssueDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [releaseImmediately, setReleaseImmediately] = useState(true);
 
   const previewCertNo = generateNextCertificateNo(certificates, certCourse);
@@ -98,7 +99,7 @@ function AdminCertificatesPage() {
       studentName: student.name,
       photo: student.photo,
       course: certCourse,
-      issuedOn: new Date().toISOString().slice(0, 10),
+      issuedOn: issueDate || new Date().toISOString().slice(0, 10),
       status: "Valid",
       isReleased: releaseImmediately,
     };
@@ -109,6 +110,7 @@ function AdminCertificatesPage() {
     }
     toast.success(`Certificate ${newCert.number} issued for ${newCert.studentName}`);
     setSelectedStudentId("");
+    setIssueDate(new Date().toISOString().slice(0, 10));
     setOpen(false);
   }
 
@@ -128,6 +130,7 @@ function AdminCertificatesPage() {
               setOpen(val);
               if (!val) {
                 setSelectedStudentId("");
+                setIssueDate(new Date().toISOString().slice(0, 10));
               }
             }}
           >
@@ -199,6 +202,20 @@ function AdminCertificatesPage() {
                   </select>
                 </div>
 
+                <div className="space-y-1.5">
+                  <Label htmlFor="issueDate" className="text-xs font-semibold">
+                    Issue Date *
+                  </Label>
+                  <Input
+                    id="issueDate"
+                    type="date"
+                    required
+                    value={issueDate}
+                    onChange={(e) => setIssueDate(e.target.value)}
+                    className="h-9 w-full border border-input bg-background px-3 text-sm rounded-none focus:outline-none focus:ring-1 focus:ring-[#164535]"
+                  />
+                </div>
+
                 <div className="border border-border/80 p-3 bg-muted/20 space-y-2">
                   <div className="flex items-center gap-2">
                     <input
@@ -246,7 +263,25 @@ function AdminCertificatesPage() {
               <p className="text-[11px] text-muted-foreground font-mono">Enrol No: {c.studentId}</p>
             </div>,
             <span className="font-medium text-xs">{c.course}</span>,
-            <span className="text-xs">{formatDateDMY(c.issuedOn)}</span>,
+            <div>
+              <input
+                type="date"
+                value={c.issuedOn ? c.issuedOn.slice(0, 10) : ""}
+                onChange={async (e) => {
+                  const nextDate = e.target.value;
+                  if (!nextDate) return;
+                  try {
+                    await saveCertificate({ ...c, issuedOn: nextDate });
+                    toast.success(`Issue date updated to ${formatDateDMY(nextDate)} for ${c.number}`);
+                  } catch (err) {
+                    console.error(err);
+                    toast.error("Failed to update issue date");
+                  }
+                }}
+                title="Click to edit issue date"
+                className="h-8 px-2 text-xs border border-input bg-background font-mono rounded-none focus:outline-none focus:ring-1 focus:ring-[#164535] cursor-pointer"
+              />
+            </div>,
             <StatusPill status={c.status} />,
 
             /* Toggle Student Download Access Button */
